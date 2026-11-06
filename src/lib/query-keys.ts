@@ -12,9 +12,11 @@ export const queryKeys = {
     featured: () => ['nfts', 'featured'] as const,
   },
   session: (token: string | null) => ['session', token] as const,
+  guestCart: () => ['cart', 'guest'] as const,
   user: {
     all: ['user'] as const,
     scope: (userId: string) => ['user', userId] as const,
     favorites: (userId: string) => ['user', userId, 'favorites'] as const,
+    cart: (userId: string) => ['user', userId, 'cart'] as const,
   },
 }
