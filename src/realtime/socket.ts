@@ -39,7 +39,9 @@ class RealtimeClient {
       transports: ['websocket'],
       query: token ? { token } : {},
       reconnectionDelay: 500,
-      reconnectionDelayMax: 5_000,
+      reconnectionDelayMax: 3_000,
+      // Tentativa sem resposta é abandonada em 5 s (o padrão de 20 s atrasaria a retomada).
+      timeout: 5_000,
     })
     this.socket = socket
     this.setStatus('connecting')
