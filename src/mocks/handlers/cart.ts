@@ -3,6 +3,7 @@ import { HttpResponse, http } from 'msw'
 import { z } from 'zod'
 import {
   addCartItemRequest,
+  applyCouponRequest,
   updateCartItemRequest,
   type Cart,
   type CartItem,
@@ -11,6 +12,7 @@ import {
 import { editionId as editionIdSchema, type EditionId } from '@/api/contracts/catalog'
 import { db, type CartLineRecord, type MockDatabase } from '../db'
 import { lookupSession } from '../lib/auth'
+import { checkCoupon, computeSummary } from '../lib/pricing'
 import { apiError, withNetwork } from '../lib/respond'
 import { EDITION_LABELS } from '../lib/serialize'
 import { fieldErrorsFrom, readJson } from '../lib/validation'
@@ -81,10 +83,18 @@ export function buildCart(state: MockDatabase, ownerKey: string): Cart {
     (latest, line) => (line.addedAt > latest ? line.addedAt : latest),
     new Date(0).toISOString(),
   )
+  const { coupon, summary } = computeSummary(
+    subtotal.toFixed(),
+    state.cartCoupons[ownerKey] ?? null,
+    'ethereum',
+    items.length > 0,
+  )
   return {
     items,
     itemCount: items.reduce((count, item) => count + item.quantity, 0),
     subtotalEth: subtotal.toFixed(),
+    coupon,
+    summary,
     updatedAt,
   }
 }
@@ -224,6 +234,63 @@ export const cartHandlers = [
           }
         }
         delete draft.carts[guestKey]
+        // O cupom do visitante acompanha os itens se a conta ainda não tiver um.
+        if (draft.cartCoupons[guestKey] && !draft.cartCoupons[owner.key]) {
+          draft.cartCoupons[owner.key] = draft.cartCoupons[guestKey]
+        }
+        delete draft.cartCoupons[guestKey]
+      })
+      return HttpResponse.json(buildCart(next, owner.key))
+    }),
+  ),
+
+  http.post(
+    `${API}/cart/coupon`,
+    withNetwork('POST /cart/coupon', async ({ request }) => {
+      const owner = resolveOwner(request)
+      if (!owner.ok) return owner.response
+      const parsed = applyCouponRequest.safeParse(await readJson(request))
+      if (!parsed.success) {
+        return apiError(422, 'VALIDATION_ERROR', 'Código inválido.', { fieldErrors: fieldErrorsFrom(parsed.error) })
+      }
+      const check = checkCoupon(parsed.data.code)
+      if (!check.ok) return apiError(422, check.code, check.message, { fieldErrors: { code: check.message } })
+      const next = db.update((draft) => {
+        draft.cartCoupons[owner.key] = check.coupon.code
+      })
+      return HttpResponse.json(buildCart(next, owner.key))
+    }),
+  ),
+
+  http.delete(
+    `${API}/cart/coupon`,
+    withNetwork('DELETE /cart/coupon', ({ request }) => {
+      const owner = resolveOwner(request)
+      if (!owner.ok) return owner.response
+      const next = db.update((draft) => {
+        delete draft.cartCoupons[owner.key]
+      })
+      return HttpResponse.json(buildCart(next, owner.key))
+    }),
+  ),
+
+  /**
+   * O usuário confirma as alterações: preços passam a ser os atuais e
+   * quantidades acima do estoque são ajustadas. Itens esgotados continuam
+   * sinalizados até serem removidos.
+   */
+  http.post(
+    `${API}/cart/accept-changes`,
+    withNetwork('POST /cart/accept-changes', ({ request }) => {
+      const owner = resolveOwner(request)
+      if (!owner.ok) return owner.response
+      const next = db.update((draft) => {
+        for (const line of draft.carts[owner.key] ?? []) {
+          const found = findEdition(draft, line.nftId, line.editionId)
+          if (!found) continue
+          line.priceAtAddEth = found.edition.priceEth
+          if (found.edition.available > 0) line.quantity = Math.min(line.quantity, found.edition.available)
+        }
       })
       return HttpResponse.json(buildCart(next, owner.key))
     }),

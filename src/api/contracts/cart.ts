@@ -33,10 +33,30 @@ export const cartItem = z.object({
 })
 export type CartItem = z.infer<typeof cartItem>
 
+/** Cupom aplicado ao carrinho. `not-eligible`: válido, mas a condição (ex.: subtotal mínimo) não é atendida. */
+export const appliedCoupon = z.object({
+  code: z.string(),
+  description: z.string(),
+  status: z.enum(['applied', 'not-eligible']),
+  message: z.string().nullable(),
+})
+export type AppliedCoupon = z.infer<typeof appliedCoupon>
+
+/** Valores calculados pelo servidor: a interface nunca recalcula o total por conta própria. */
+export const cartSummary = z.object({
+  subtotalEth: ethAmount,
+  discountEth: ethAmount,
+  networkFeeEth: ethAmount,
+  totalEth: ethAmount,
+})
+export type CartSummary = z.infer<typeof cartSummary>
+
 export const cart = z.object({
   items: z.array(cartItem),
   itemCount: z.number().int().min(0),
   subtotalEth: ethAmount,
+  coupon: appliedCoupon.nullable(),
+  summary: cartSummary,
   updatedAt: isoDate,
 })
 export type Cart = z.infer<typeof cart>
@@ -50,4 +70,13 @@ export type AddCartItemRequest = z.infer<typeof addCartItemRequest>
 
 export const updateCartItemRequest = z.object({
   quantity: z.number().int().min(1, 'A quantidade mínima é 1.'),
+})
+
+export const applyCouponRequest = z.object({
+  code: z
+    .string()
+    .trim()
+    .min(1, 'Digite um código promocional.')
+    .max(30, 'Código muito longo.')
+    .transform((value) => value.toUpperCase()),
 })

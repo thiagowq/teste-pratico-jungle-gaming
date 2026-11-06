@@ -31,6 +31,8 @@ export interface MockDatabase {
   favorites: Record<string, string[]>
   /** Carrinhos por dono: `user:<id>` ou `guest:<uuid>`. */
   carts: Record<string, CartLineRecord[]>
+  /** Cupom aplicado por dono do carrinho. */
+  cartCoupons: Record<string, string>
 }
 
 function seed(): MockDatabase {
@@ -42,7 +44,8 @@ function seed(): MockDatabase {
     nftOrder: nfts.map((nft) => nft.id),
     favorites: { 'user-ana': ['sage-nomad-009'] },
     carts: {},
+    cartCoupons: {},
   }
 }
 
-export const db = createPersistentState<MockDatabase>('db:v2', seed)
+export const db = createPersistentState<MockDatabase>('db:v3', seed)
