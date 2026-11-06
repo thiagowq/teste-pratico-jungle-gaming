@@ -31,7 +31,10 @@ function Slider({
       )}
       {...props}
     >
-      <SliderPrimitive.Track data-slot="slider-track" className="relative h-1 grow overflow-hidden rounded-full bg-brand/40">
+      <SliderPrimitive.Track
+        data-slot="slider-track"
+        className="relative h-1 grow overflow-hidden rounded-full bg-brand/40"
+      >
         <SliderPrimitive.Range data-slot="slider-range" className="absolute h-full bg-brand" />
       </SliderPrimitive.Track>
       {values.map((_, index) => (

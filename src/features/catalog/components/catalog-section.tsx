@@ -19,7 +19,15 @@ interface CatalogSectionProps {
 const GRID_CLASS =
   'grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-x-[34px] md:gap-y-[72px] max-md:[&>li:nth-child(even)]:translate-y-8 max-md:pb-8'
 
-function StatusMessage({ title, description, action }: { title: string; description: string; action?: React.ReactNode }) {
+function StatusMessage({
+  title,
+  description,
+  action,
+}: {
+  title: string
+  description: string
+  action?: React.ReactNode
+}) {
   return (
     <div className="flex min-h-[420px] flex-col items-center justify-center gap-3 rounded-lg border border-border bg-surface-card p-8 text-center">
       <p className="text-lg font-bold">{title}</p>
@@ -37,7 +45,12 @@ export function CatalogSection({ params, onChange }: CatalogSectionProps) {
   const isInitialLoading = query.isPending
   const isRefreshing = query.isFetching && !query.isPending
   const hasFilters = Boolean(
-    params.q || params.categories?.length || params.networks?.length || params.minPrice || params.maxPrice || params.tab,
+    params.q ||
+    params.categories?.length ||
+    params.networks?.length ||
+    params.minPrice ||
+    params.maxPrice ||
+    params.tab,
   )
 
   const changePage = (next: number) => {
@@ -47,7 +60,14 @@ export function CatalogSection({ params, onChange }: CatalogSectionProps) {
   }
 
   const clearAll = () =>
-    onChange({ q: undefined, categories: undefined, networks: undefined, minPrice: undefined, maxPrice: undefined, tab: undefined })
+    onChange({
+      q: undefined,
+      categories: undefined,
+      networks: undefined,
+      minPrice: undefined,
+      maxPrice: undefined,
+      tab: undefined,
+    })
 
   let results: React.ReactNode
   if (isInitialLoading) {
@@ -84,7 +104,9 @@ export function CatalogSection({ params, onChange }: CatalogSectionProps) {
         <StatusMessage
           title="Nenhum NFT encontrado"
           description={
-            hasFilters ? 'Tente remover alguns filtros ou buscar por outro termo.' : 'Ainda não há NFTs listados no mercado.'
+            hasFilters
+              ? 'Tente remover alguns filtros ou buscar por outro termo.'
+              : 'Ainda não há NFTs listados no mercado.'
           }
           action={hasFilters ? <Button onClick={clearAll}>Limpar busca e filtros</Button> : undefined}
         />
@@ -133,7 +155,10 @@ export function CatalogSection({ params, onChange }: CatalogSectionProps) {
           </p>
 
           {query.isError && data && (
-            <p role="alert" className="mb-4 rounded-md border border-coral/50 bg-surface-card px-4 py-3 text-sm text-coral">
+            <p
+              role="alert"
+              className="mb-4 rounded-md border border-coral/50 bg-surface-card px-4 py-3 text-sm text-coral"
+            >
               Não foi possível atualizar os resultados. Mostrando os dados mais recentes.{' '}
               <button type="button" className="font-bold underline" onClick={() => void query.refetch()}>
                 Tentar novamente
@@ -143,7 +168,14 @@ export function CatalogSection({ params, onChange }: CatalogSectionProps) {
 
           {results}
 
-          {data && <Pagination page={page} totalPages={data.totalPages} onPageChange={changePage} className="mt-12 md:mt-[88px]" />}
+          {data && (
+            <Pagination
+              page={page}
+              totalPages={data.totalPages}
+              onPageChange={changePage}
+              className="mt-12 md:mt-[88px]"
+            />
+          )}
         </div>
       </div>
     </section>

@@ -1,7 +1,13 @@
 import Decimal from 'decimal.js'
 import { HttpResponse, http } from 'msw'
 import { z } from 'zod'
-import { addCartItemRequest, updateCartItemRequest, type Cart, type CartItem, type CartItemIssue } from '@/api/contracts/cart'
+import {
+  addCartItemRequest,
+  updateCartItemRequest,
+  type Cart,
+  type CartItem,
+  type CartItemIssue,
+} from '@/api/contracts/cart'
 import { editionId as editionIdSchema, type EditionId } from '@/api/contracts/catalog'
 import { db, type CartLineRecord, type MockDatabase } from '../db'
 import { lookupSession } from '../lib/auth'
@@ -28,7 +34,8 @@ function resolveOwner(request: Request): Owner {
     }
   }
   const guest = request.headers.get('X-Guest-Cart')
-  if (!guest) return { ok: false, response: apiError(400, 'VALIDATION_ERROR', 'Carrinho do visitante não identificado.') }
+  if (!guest)
+    return { ok: false, response: apiError(400, 'VALIDATION_ERROR', 'Carrinho do visitante não identificado.') }
   return { ok: true, key: `guest:${guest}`, userId: null }
 }
 
@@ -51,7 +58,8 @@ export function buildCart(state: MockDatabase, ownerKey: string): Cart {
       issues.push({ type: 'price-changed', previousPriceEth: line.priceAtAddEth })
     }
     if (edition.available === 0) issues.push({ type: 'sold-out' })
-    else if (line.quantity > edition.available) issues.push({ type: 'insufficient-stock', available: edition.available })
+    else if (line.quantity > edition.available)
+      issues.push({ type: 'insufficient-stock', available: edition.available })
     items.push({
       nftId: nft.id,
       editionId: edition.id,
@@ -69,7 +77,10 @@ export function buildCart(state: MockDatabase, ownerKey: string): Cart {
     })
   }
   const subtotal = items.reduce((sum, item) => sum.plus(item.lineTotalEth), new Decimal(0))
-  const updatedAt = lines.reduce((latest, line) => (line.addedAt > latest ? line.addedAt : latest), new Date(0).toISOString())
+  const updatedAt = lines.reduce(
+    (latest, line) => (line.addedAt > latest ? line.addedAt : latest),
+    new Date(0).toISOString(),
+  )
   return {
     items,
     itemCount: items.reduce((count, item) => count + item.quantity, 0),
@@ -120,7 +131,9 @@ export const cartHandlers = [
       const state = db.get()
       const found = findEdition(state, nftId, editionId)
       if (!found) return apiError(404, 'NOT_FOUND', 'NFT ou edição inexistente.')
-      const existing = (state.carts[owner.key] ?? []).find((line) => line.nftId === nftId && line.editionId === editionId)
+      const existing = (state.carts[owner.key] ?? []).find(
+        (line) => line.nftId === nftId && line.editionId === editionId,
+      )
       const error = checkQuantity(found.edition, (existing?.quantity ?? 0) + quantity)
       if (error) return error
       const next = db.update((draft) => {

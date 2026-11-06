@@ -41,7 +41,7 @@ export function NftCarousel({ title, items, headingId }: { title: string; items:
       </div>
       <ul
         ref={trackRef}
-        className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-2 [scrollbar-width:none] md:mx-0 md:gap-7 md:px-0 [&::-webkit-scrollbar]:hidden"
+        className="-mx-4 flex snap-x snap-mandatory [scrollbar-width:none] gap-4 overflow-x-auto scroll-smooth px-4 pb-2 md:mx-0 md:gap-7 md:px-0 [&::-webkit-scrollbar]:hidden"
       >
         {items.map((nft) => (
           <li key={nft.id} className="w-[46%] shrink-0 snap-start sm:w-[30%] lg:w-[calc((100%-4*28px)/5)]">

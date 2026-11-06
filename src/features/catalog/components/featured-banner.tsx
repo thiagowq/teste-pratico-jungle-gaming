@@ -27,8 +27,14 @@ export function FeaturedBanner() {
       <div className="mt-4 aspect-[310/368] overflow-hidden rounded-[22px]">
         <NftImage artwork={featured.artwork} alt="" sizes="310px" className="size-full" />
       </div>
-      <span aria-hidden className="absolute top-[105px] left-[38px] size-[15px] rounded-[29px] bg-linear-to-b from-brand to-transparent" />
-      <span aria-hidden className="absolute right-[17px] bottom-[84px] size-[45px] rounded-[29px] bg-linear-to-b from-brand to-transparent" />
+      <span
+        aria-hidden
+        className="absolute top-[105px] left-[38px] size-[15px] rounded-[29px] bg-linear-to-b from-brand to-transparent"
+      />
+      <span
+        aria-hidden
+        className="absolute right-[17px] bottom-[84px] size-[45px] rounded-[29px] bg-linear-to-b from-brand to-transparent"
+      />
     </Link>
   )
 }

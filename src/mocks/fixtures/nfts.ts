@@ -43,22 +43,57 @@ const FAMILIES: Record<Artwork, { collection: string; attributes: string[]; name
   'gorilla-nomad': {
     collection: 'Nomad Club',
     attributes: ['Chapéu bucket', 'Moletom', 'Barba prateada'],
-    names: ['Sage Nomad', 'Cosmic Bloom', 'Violet Nomad', 'Lilac Drifter', 'Lavender Sage', 'Plum Wanderer', 'Iris Monk'],
+    names: [
+      'Sage Nomad',
+      'Cosmic Bloom',
+      'Violet Nomad',
+      'Lilac Drifter',
+      'Lavender Sage',
+      'Plum Wanderer',
+      'Iris Monk',
+    ],
   },
   'ape-baron': {
     collection: 'Baron Society',
     attributes: ['Blazer', 'Gola alta', 'Brinco'],
-    names: ['Neon Vessel', 'Ivory Baron', 'Onyx Chancellor', 'Pearl Envoy', 'Slate Regent', 'Coal Diplomat', 'Linen Count'],
+    names: [
+      'Neon Vessel',
+      'Ivory Baron',
+      'Onyx Chancellor',
+      'Pearl Envoy',
+      'Slate Regent',
+      'Coal Diplomat',
+      'Linen Count',
+    ],
   },
   'ape-golden': {
     collection: 'Golden Frequencies',
     attributes: ['Fones', 'Pelagem dourada', 'Jaqueta bomber'],
-    names: ['Golden Beat', 'Golden Signal', 'Golden Frequency', 'Amber Groove', 'Honey Rhythm', 'Saffron Echo', 'Topaz Tempo'],
+    names: [
+      'Golden Beat',
+      'Golden Signal',
+      'Golden Frequency',
+      'Amber Groove',
+      'Honey Rhythm',
+      'Saffron Echo',
+      'Topaz Tempo',
+    ],
   },
 }
 
 const CREATORS = ['Nova Sato', 'Lia Moreau', 'Kenji Arai', 'Duda Ventura', 'Theo Okafor', 'Maya Lund']
-const REVIEWERS = ['Rafa M.', 'Bea L.', 'Caio T.', 'Nina P.', 'Gus R.', 'Lara S.', 'Davi K.', 'Iris V.', 'Leo F.', 'Mia C.']
+const REVIEWERS = [
+  'Rafa M.',
+  'Bea L.',
+  'Caio T.',
+  'Nina P.',
+  'Gus R.',
+  'Lara S.',
+  'Davi K.',
+  'Iris V.',
+  'Leo F.',
+  'Mia C.',
+]
 const REVIEW_TEXTS = [
   'Arte impecável, os detalhes em alta resolução são incríveis.',
   'Entrega rápida na carteira e procedência clara.',
@@ -119,7 +154,13 @@ function buildEditions(base: string, previous: string | null, random: ReturnType
   const soldOutEdition = index % 7 === 3 ? '1-10' : index % 11 === 5 ? '1-1' : null
   const editions: NftRecord['editions'] = [
     { id: '1-1', priceEth: money(new Decimal(base).mul(10)), previousPriceEth: null, available: 1, maxPerOrder: 1 },
-    { id: '1-10', priceEth: money(new Decimal(base).mul(2.5)), previousPriceEth: null, available: random.int(2, 10), maxPerOrder: 5 },
+    {
+      id: '1-10',
+      priceEth: money(new Decimal(base).mul(2.5)),
+      previousPriceEth: null,
+      available: random.int(2, 10),
+      maxPerOrder: 5,
+    },
     { id: '1-50', priceEth: base, previousPriceEth: previous, available: random.int(8, 50), maxPerOrder: 10 },
     { id: 'open', priceEth: money(new Decimal(base).div(2)), previousPriceEth: null, available: 999, maxPerOrder: 20 },
   ]
@@ -139,9 +180,15 @@ function buildReviews(id: string, count: number, random: ReturnType<typeof creat
 /** Gera o catálogo: 9 itens do Figma + itens derivados, total de 63 (7 páginas). */
 export function buildNftFixtures(seed = 4242): NftRecord[] {
   const random = createRandom(seed)
-  const items: Array<{ name: string; number: string; artwork: Artwork; price: string; previous?: string; badge?: 'raro'; reviews?: number }> = [
-    ...FIGMA_ITEMS,
-  ]
+  const items: Array<{
+    name: string
+    number: string
+    artwork: Artwork
+    price: string
+    previous?: string
+    badge?: 'raro'
+    reviews?: number
+  }> = [...FIGMA_ITEMS]
   const artworks: Artwork[] = ['ape-emerald', 'gorilla-nomad', 'ape-baron', 'ape-golden']
   const used = new Set(items.map((item) => `${item.name}`))
 

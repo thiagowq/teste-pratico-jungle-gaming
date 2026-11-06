@@ -48,7 +48,15 @@ const SLIDES: Slide[] = [
   },
 ]
 
-function Dots({ current, onSelect, className }: { current: number; onSelect: (index: number) => void; className?: string }) {
+function Dots({
+  current,
+  onSelect,
+  className,
+}: {
+  current: number
+  onSelect: (index: number) => void
+  className?: string
+}) {
   return (
     <div className={cn('flex gap-2', className)} role="group" aria-label="Destaques">
       {SLIDES.map((slide, index) => (
@@ -104,14 +112,26 @@ export function Hero() {
           <Dots current={current} onSelect={setCurrent} />
         </div>
         <div className="aspect-square w-[min(450px,42vw)] shrink-0 overflow-hidden rounded-3xl">
-          <NftImage artwork={slide.artwork} alt={slide.alt} sizes="(min-width: 1200px) 450px, 42vw" priority className="size-full" />
+          <NftImage
+            artwork={slide.artwork}
+            alt={slide.alt}
+            sizes="(min-width: 1200px) 450px, 42vw"
+            priority
+            className="size-full"
+          />
         </div>
       </div>
 
       {/* Mobile */}
       <div className="relative overflow-hidden rounded-xl bg-linear-to-br from-brand/20 to-brand/10 p-4 md:hidden">
-        <span aria-hidden className="absolute -top-8 -left-20 size-[248px] rounded-full bg-linear-to-b from-[#dd9a5f]/40 to-transparent" />
-        <span aria-hidden className="absolute -top-2.5 left-[73px] size-[248px] rounded-full bg-linear-to-b from-[#dd9a5f]/35 to-transparent" />
+        <span
+          aria-hidden
+          className="absolute -top-8 -left-20 size-[248px] rounded-full bg-linear-to-b from-[#dd9a5f]/40 to-transparent"
+        />
+        <span
+          aria-hidden
+          className="absolute -top-2.5 left-[73px] size-[248px] rounded-full bg-linear-to-b from-[#dd9a5f]/35 to-transparent"
+        />
         <div className="relative flex items-center gap-2" aria-live="polite">
           <div className="flex min-w-0 flex-1 flex-col">
             <p className="text-xs leading-4 font-medium">{slide.eyebrow}</p>
@@ -121,7 +141,11 @@ export function Hero() {
               {slide.mobileTitle[1]}
             </h1>
             <p className="mt-1.5 text-xs leading-[18px] text-text-secondary">{slide.mobileText}</p>
-            <Link to="/" hash="mercado" className="mt-1 flex items-center gap-2 text-xs leading-[14px] font-bold text-brand-accent">
+            <Link
+              to="/"
+              hash="mercado"
+              className="mt-1 flex items-center gap-2 text-xs leading-[14px] font-bold text-brand-accent"
+            >
               EXPLORAR
               <ArrowRightIcon aria-hidden className="size-4" color="var(--kurio-primary)" />
             </Link>

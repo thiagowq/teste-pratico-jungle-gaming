@@ -31,7 +31,9 @@ export function EditionPicker({
               onClick={() => !soldOut && onSelect(edition.id)}
               className={cn(
                 'h-7 rounded-full border px-1.5 text-sm leading-4 transition-colors',
-                active ? 'border-brand font-medium text-brand-accent' : 'border-border text-text-secondary hover:border-brand',
+                active
+                  ? 'border-brand font-medium text-brand-accent'
+                  : 'border-border text-text-secondary hover:border-brand',
                 soldOut && 'cursor-not-allowed line-through opacity-50 hover:border-border',
                 edition.id === 'open' && 'px-2',
               )}

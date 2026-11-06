@@ -18,8 +18,14 @@ for (const file of readdirSync(sourceDir).filter((name) => name.endsWith('.png')
   const source = sharp(join(sourceDir, file))
   for (const width of NFT_IMAGE_WIDTHS) {
     const resized = source.clone().resize({ width, withoutEnlargement: true })
-    await resized.clone().avif({ quality: 55, effort: 6 }).toFile(join(outputDir, `${name}-${width}.avif`))
-    await resized.clone().webp({ quality: 78 }).toFile(join(outputDir, `${name}-${width}.webp`))
+    await resized
+      .clone()
+      .avif({ quality: 55, effort: 6 })
+      .toFile(join(outputDir, `${name}-${width}.avif`))
+    await resized
+      .clone()
+      .webp({ quality: 78 })
+      .toFile(join(outputDir, `${name}-${width}.webp`))
   }
   console.log(`${name}: ${NFT_IMAGE_WIDTHS.length * 2} variantes`)
 }

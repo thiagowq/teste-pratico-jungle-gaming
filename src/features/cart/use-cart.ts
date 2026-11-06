@@ -58,7 +58,8 @@ export function useRemoveCartItem() {
   const { key } = useCartKey()
   return useMutation({
     mutationKey: ['cart', 'remove'],
-    mutationFn: ({ nftId, editionId }: { nftId: string; editionId: EditionId }) => cartApi.removeCartItem(nftId, editionId),
+    mutationFn: ({ nftId, editionId }: { nftId: string; editionId: EditionId }) =>
+      cartApi.removeCartItem(nftId, editionId),
     onSuccess: (cart) => queryClient.setQueryData<Cart>(key, cart),
   })
 }

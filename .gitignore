@@ -35,3 +35,6 @@ dist-ssr
 
 # Configuração local de ferramentas
 .claude/
+
+# Arquivos temporários do plugin do TanStack Router
+.tanstack/

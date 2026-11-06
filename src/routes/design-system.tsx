@@ -45,7 +45,9 @@ function DesignSystemPage() {
       <h1 className="text-[43px] leading-[70px] font-bold">Design system Kurio</h1>
 
       <section aria-labelledby="ds-colors" className="space-y-4">
-        <h2 id="ds-colors" className="text-2xl font-bold">Cores</h2>
+        <h2 id="ds-colors" className="text-2xl font-bold">
+          Cores
+        </h2>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {colors.map(([name, hex]) => (
             <li key={name} className="rounded-md border border-border p-2 text-xs">
@@ -59,7 +61,9 @@ function DesignSystemPage() {
       </section>
 
       <section aria-labelledby="ds-type" className="space-y-3">
-        <h2 id="ds-type" className="text-2xl font-bold">Tipografia (Roboto Mono)</h2>
+        <h2 id="ds-type" className="text-2xl font-bold">
+          Tipografia (Roboto Mono)
+        </h2>
         <p className="text-[43px] leading-[70px] font-bold">SEJA DONO DO FUTURO</p>
         <p className="text-[28px] leading-[37px] font-bold">Heading 28 Bold</p>
         <p className="text-lg font-bold text-brand-accent">1.19 ETH</p>
@@ -68,14 +72,18 @@ function DesignSystemPage() {
       </section>
 
       <section aria-labelledby="ds-buttons" className="flex flex-wrap items-center gap-3">
-        <h2 id="ds-buttons" className="sr-only">Botões</h2>
+        <h2 id="ds-buttons" className="sr-only">
+          Botões
+        </h2>
         <Button>COMPRAR</Button>
         <Button variant="outline">Favoritar</Button>
         <Button variant="ghost">Continuar explorando</Button>
       </section>
 
       <section aria-labelledby="ds-icons" className="space-y-4">
-        <h2 id="ds-icons" className="text-2xl font-bold">Ícones ({Object.keys(icons).length})</h2>
+        <h2 id="ds-icons" className="text-2xl font-bold">
+          Ícones ({Object.keys(icons).length})
+        </h2>
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-6">
           {Object.entries(icons).map(([path, Icon]) => (
             <li key={path} className="flex flex-col items-center gap-2 rounded-md bg-surface-card p-3 text-[10px]">
@@ -87,7 +95,9 @@ function DesignSystemPage() {
       </section>
 
       <section aria-labelledby="ds-art" className="space-y-4">
-        <h2 id="ds-art" className="text-2xl font-bold">Artes</h2>
+        <h2 id="ds-art" className="text-2xl font-bold">
+          Artes
+        </h2>
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {artworks.map((artwork) => (
             <li key={artwork} className="overflow-hidden rounded-xl bg-surface-card p-3">

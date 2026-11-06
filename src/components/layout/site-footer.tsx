@@ -13,9 +13,21 @@ import { cn } from '@/lib/utils'
 import { Container } from './container'
 
 const FEATURES = [
-  { mark: 'W', title: 'Segurança da carteira', text: 'Proteja sua carteira e colecione arte digital verificada com confiança.' },
-  { mark: 'C', title: 'Criadores em destaque', text: 'Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.' },
-  { mark: 'D', title: 'Alertas de lançamentos', text: 'Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.' },
+  {
+    mark: 'W',
+    title: 'Segurança da carteira',
+    text: 'Proteja sua carteira e colecione arte digital verificada com confiança.',
+  },
+  {
+    mark: 'C',
+    title: 'Criadores em destaque',
+    text: 'Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.',
+  },
+  {
+    mark: 'D',
+    title: 'Alertas de lançamentos',
+    text: 'Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.',
+  },
 ]
 
 const PROFILE_LINKS: Array<{ label: string; to?: '/conta/perfil' | '/conta/favoritos'; secao?: string }> = [
@@ -96,7 +108,10 @@ export function SiteFooter({ className }: { className?: string }) {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-[repeat(3,1fr)_1.35fr] lg:gap-0">
             {FEATURES.map((feature) => (
               <div key={feature.mark} className="flex flex-col gap-3 lg:border-r lg:border-brand lg:px-4">
-                <span aria-hidden className="grid size-[74px] place-items-center rounded-full bg-brand text-2xl font-bold text-ink">
+                <span
+                  aria-hidden
+                  className="grid size-[74px] place-items-center rounded-full bg-brand text-2xl font-bold text-ink"
+                >
                   {feature.mark}
                 </span>
                 <h2 className="text-[17px] leading-4 font-bold">{feature.title}</h2>

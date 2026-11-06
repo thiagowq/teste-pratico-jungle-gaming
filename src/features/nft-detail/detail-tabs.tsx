@@ -6,14 +6,30 @@ import { cn } from '@/lib/utils'
 export type DetailTab = 'detalhes' | 'avaliacoes'
 
 const trigger =
-  "relative pb-3 text-[17px] leading-4 whitespace-nowrap text-foreground transition-colors hover:text-brand-accent data-[state=active]:font-bold data-[state=active]:text-brand-accent data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:-bottom-px data-[state=active]:after:h-[3px] data-[state=active]:after:bg-brand"
+  'relative pb-3 text-[17px] leading-4 whitespace-nowrap text-foreground transition-colors hover:text-brand-accent data-[state=active]:font-bold data-[state=active]:text-brand-accent data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:-bottom-px data-[state=active]:after:h-[3px] data-[state=active]:after:bg-brand'
 
 const dateFormat = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
 
-export function DetailTabs({ nft, tab, onTabChange }: { nft: NftDetail; tab: DetailTab; onTabChange: (tab: DetailTab) => void }) {
+export function DetailTabs({
+  nft,
+  tab,
+  onTabChange,
+}: {
+  nft: NftDetail
+  tab: DetailTab
+  onTabChange: (tab: DetailTab) => void
+}) {
   return (
-    <TabsPrimitive.Root id="abas-detalhe" value={tab} onValueChange={(value) => onTabChange(value as DetailTab)} className="scroll-mt-6">
-      <TabsPrimitive.List aria-label="Informações do NFT" className="flex gap-8 overflow-x-auto border-b border-brand/40">
+    <TabsPrimitive.Root
+      id="abas-detalhe"
+      value={tab}
+      onValueChange={(value) => onTabChange(value as DetailTab)}
+      className="scroll-mt-6"
+    >
+      <TabsPrimitive.List
+        aria-label="Informações do NFT"
+        className="flex gap-8 overflow-x-auto border-b border-brand/40"
+      >
         <TabsPrimitive.Trigger value="detalhes" className={trigger}>
           Detalhes do NFT
         </TabsPrimitive.Trigger>
