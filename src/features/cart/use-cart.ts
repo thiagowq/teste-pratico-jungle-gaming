@@ -64,6 +64,20 @@ export function useRemoveCartItem() {
   })
 }
 
+function useCartMutation<TVariables>(mutationKey: string, mutationFn: (variables: TVariables) => Promise<Cart>) {
+  const queryClient = useQueryClient()
+  const { key } = useCartKey()
+  return useMutation({
+    mutationKey: ['cart', mutationKey],
+    mutationFn,
+    onSuccess: (cart) => queryClient.setQueryData<Cart>(key, cart),
+  })
+}
+
+export const useApplyCoupon = () => useCartMutation('coupon', (code: string) => cartApi.applyCoupon(code))
+export const useRemoveCoupon = () => useCartMutation('remove-coupon', () => cartApi.removeCoupon())
+export const useAcceptCartChanges = () => useCartMutation('accept-changes', () => cartApi.acceptCartChanges())
+
 /**
  * Após o login: leva os itens do visitante para o carrinho da conta.
  * Falha aqui não impede o login; os itens continuam no carrinho do visitante
