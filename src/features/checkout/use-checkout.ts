@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
@@ -11,6 +11,7 @@ import type { ApiError } from '@/api/errors'
 import { useSession } from '@/features/auth/session'
 import { queryKeys } from '@/lib/query-keys'
 import { useZodForm } from '@/lib/use-zod-form'
+import { realtime } from '@/realtime/socket'
 
 const EMPTY: BuyerForm = {
   displayName: '',
@@ -271,8 +272,34 @@ export function useCheckout(wallets: WalletsResponse) {
     }
   }
 
+  // Tempo real: se um item da cotação em revisão muda, a cotação é refeita e exige nova confirmação.
+  const quoteRef = useRef(quote)
+  useEffect(() => {
+    quoteRef.current = quote
+  }, [quote])
+  const requote = useRef<() => void>(() => {})
+  useEffect(() => {
+    requote.current = () => {
+      storage.write(attemptKey, null)
+      setReviewNotice(
+        'O preço ou a disponibilidade de um item mudou agora. Atualizamos a cotação: confira e confirme novamente.',
+      )
+      quoteMutation.mutate(form.values.network, {
+        onSuccess: (next) => setQuote(next),
+        onError: (error) => handleOrderError(error as ApiError),
+      })
+    }
+  })
+  useEffect(
+    () =>
+      realtime.on('nft.updated', (event) => {
+        if (quoteRef.current?.items.some((item) => item.nftId === event.resource.id)) requote.current()
+      }),
+    [],
+  )
+
   const confirm = () => {
-    if (!quote || connection.status !== 'connected' || orderMutation.isPending) return
+    if (!quote || connection.status !== 'connected' || orderMutation.isPending || quoteMutation.isPending) return
     const data = form.validateNow()
     if (!data) {
       setQuote(null)

@@ -17,6 +17,7 @@ import { SiteHeader } from '@/components/layout/site-header'
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { ConnectionStatus } from '@/realtime/connection-status'
 
 export interface RouterContext {
   queryClient: QueryClient
@@ -60,6 +61,7 @@ function RootLayout() {
       {!immersive && <MobileTabBar />}
       <Toaster position="top-center" richColors closeButton />
       <SessionExpiredNotice />
+      <ConnectionStatus />
     </TooltipProvider>
   )
 }
