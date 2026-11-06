@@ -5,6 +5,8 @@
 export async function enableMocking() {
   if (import.meta.env.VITE_ENABLE_MOCKS !== 'true') return
   const [{ worker }, { installMockControl }] = await Promise.all([import('./browser'), import('./control')])
-  installMockControl()
   await worker.start({ onUnhandledRequest: 'bypass', quiet: import.meta.env.PROD })
+  // Exposto só depois que o service worker controla a página: quem espera por
+  // `window.__mocks` (testes, painel) já encontra as requisições interceptadas.
+  installMockControl()
 }
