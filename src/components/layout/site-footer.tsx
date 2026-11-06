@@ -9,6 +9,7 @@ import {
   SocialYoutubeIcon,
 } from '@/components/icons'
 import { CATEGORY_LABELS, type Category } from '@/api/contracts/catalog'
+import { cn } from '@/lib/utils'
 import { Container } from './container'
 
 const FEATURES = [
@@ -87,9 +88,9 @@ function Newsletter() {
   )
 }
 
-export function SiteFooter() {
+export function SiteFooter({ className }: { className?: string }) {
   return (
-    <footer className="mt-16 pb-[120px] md:mt-24 md:pb-6">
+    <footer className={cn('mt-16 pb-[120px] md:mt-24 md:pb-6', className)}>
       <Container>
         <section aria-label="Destaques da Kurio" className="bg-surface-card p-6 md:p-8">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-[repeat(3,1fr)_1.35fr] lg:gap-0">
