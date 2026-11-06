@@ -13,22 +13,29 @@ export const authHandlers = [
     withNetwork('POST /auth/register', async ({ request }) => {
       const parsed = registerRequest.safeParse(await readJson(request))
       if (!parsed.success) {
-        return apiError(422, 'VALIDATION_ERROR', 'Revise os campos destacados.', { fieldErrors: fieldErrorsFrom(parsed.error) })
-      }
-      const { displayName, email, password } = parsed.data
-      const normalizedEmail = email.toLowerCase()
-      const exists = Object.values(db.get().users).some((user) => user.email.toLowerCase() === normalizedEmail)
-      if (exists) {
-        return apiError(409, 'CONFLICT', 'Já existe uma conta com este e-mail.', {
-          fieldErrors: { email: 'Este e-mail já está cadastrado. Entre ou use outro e-mail.' },
+        return apiError(422, 'VALIDATION_ERROR', 'Revise os campos destacados.', {
+          fieldErrors: fieldErrorsFrom(parsed.error),
         })
+      }
+      const { username, email, password } = parsed.data
+      const normalizedEmail = email.toLowerCase()
+      const users = Object.values(db.get().users)
+      const fieldErrors: Record<string, string> = {}
+      if (users.some((user) => user.email.toLowerCase() === normalizedEmail)) {
+        fieldErrors.email = 'Este e-mail já está cadastrado. Entre ou use outro e-mail.'
+      }
+      if (users.some((user) => user.username === username)) {
+        fieldErrors.username = 'Este nome de usuário já está em uso.'
+      }
+      if (Object.keys(fieldErrors).length) {
+        return apiError(409, 'CONFLICT', 'Já existe uma conta com estes dados.', { fieldErrors })
       }
       const salt = randomToken('salt')
       const id = randomToken('user')
       const user = {
         id,
-        displayName,
-        username: normalizedEmail.split('@')[0],
+        displayName: username,
+        username,
         email: normalizedEmail,
         ensName: null,
         walletNickname: null,
@@ -48,7 +55,9 @@ export const authHandlers = [
     withNetwork('POST /auth/login', async ({ request }) => {
       const parsed = loginRequest.safeParse(await readJson(request))
       if (!parsed.success) {
-        return apiError(422, 'VALIDATION_ERROR', 'Revise os campos destacados.', { fieldErrors: fieldErrorsFrom(parsed.error) })
+        return apiError(422, 'VALIDATION_ERROR', 'Revise os campos destacados.', {
+          fieldErrors: fieldErrorsFrom(parsed.error),
+        })
       }
       const email = parsed.data.email.toLowerCase()
       const user = Object.values(db.get().users).find((candidate) => candidate.email.toLowerCase() === email)
