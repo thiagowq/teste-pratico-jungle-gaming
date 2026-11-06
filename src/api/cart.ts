@@ -31,3 +31,19 @@ export async function mergeGuestCart(guestCartId: string) {
   const { data } = await api.post('/cart/merge', { guestCartId })
   return parseResponse(cart, data)
 }
+
+export async function applyCoupon(code: string) {
+  const { data } = await api.post('/cart/coupon', { code })
+  return parseResponse(cart, data)
+}
+
+export async function removeCoupon() {
+  const { data } = await api.delete('/cart/coupon')
+  return parseResponse(cart, data)
+}
+
+/** Confirma preços e estoques atuais após alterações sinalizadas pelo servidor. */
+export async function acceptCartChanges() {
+  const { data } = await api.post('/cart/accept-changes')
+  return parseResponse(cart, data)
+}
