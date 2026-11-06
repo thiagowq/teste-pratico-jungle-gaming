@@ -1,4 +1,5 @@
 import type { RealtimeEvent } from '@/realtime/events'
+import { db } from './db'
 import { publish } from './lib/event-bus'
 import { resetAllPersistentState } from './lib/persist'
 import { reseedLatency } from './lib/respond'
@@ -25,6 +26,14 @@ export const mockControl = {
     reseedLatency()
   },
   emit: (event: RealtimeEvent, userId: string | null = null) => publish({ event, userId }),
+  /** Expira todas as sessões ativas (simula expiração durante a navegação). */
+  expireSessions: () =>
+    db.update((draft) => {
+      const past = new Date(Date.now() - 1000).toISOString()
+      Object.values(draft.sessions).forEach((session) => {
+        session.expiresAt = past
+      })
+    }),
   dropSockets: () => dropSocketConnections(),
 }
 

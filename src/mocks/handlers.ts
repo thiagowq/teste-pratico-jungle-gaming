@@ -1,5 +1,19 @@
 import type { RequestHandler, WebSocketHandler } from 'msw'
-import { realtimeHandlers } from './handlers/realtime'
+import { authHandlers } from './handlers/auth'
+import { catalogHandlers } from './handlers/catalog'
+import { favoritesHandlers } from './handlers/favorites'
+import { realtimeHandlers, setSocketUserResolver } from './handlers/realtime'
+import { lookupSession } from './lib/auth'
 
-// Handlers REST são adicionados por recurso em src/mocks/handlers/*.
-export const handlers: Array<RequestHandler | WebSocketHandler> = [...realtimeHandlers]
+// Eventos privados só chegam ao socket cujo token pertence a uma sessão válida do usuário.
+setSocketUserResolver((token) => {
+  const session = lookupSession(token)
+  return session.ok ? session.user.id : null
+})
+
+export const handlers: Array<RequestHandler | WebSocketHandler> = [
+  ...authHandlers,
+  ...catalogHandlers,
+  ...favoritesHandlers,
+  ...realtimeHandlers,
+]
