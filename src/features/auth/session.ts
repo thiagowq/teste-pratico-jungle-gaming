@@ -108,3 +108,9 @@ export function startSessionSync(queryClient: QueryClient) {
     realtime.disconnect()
   }
 }
+
+/** Atualiza o usuário da sessão em cache (ex.: após editar perfil ou avatar). */
+export function updateSessionUser(queryClient: QueryClient, user: SessionResponse['user']) {
+  const key = sessionQuery(getSessionToken()).queryKey
+  queryClient.setQueryData(key, (current) => (current ? { ...current, user } : current))
+}
