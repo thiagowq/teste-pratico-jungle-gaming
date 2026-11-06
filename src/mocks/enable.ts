@@ -4,6 +4,7 @@
  */
 export async function enableMocking() {
   if (import.meta.env.VITE_ENABLE_MOCKS !== 'true') return
-  const { worker } = await import('./browser')
+  const [{ worker }, { installMockControl }] = await Promise.all([import('./browser'), import('./control')])
+  installMockControl()
   await worker.start({ onUnhandledRequest: 'bypass', quiet: import.meta.env.PROD })
 }
