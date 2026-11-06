@@ -21,6 +21,7 @@ import { Route as NftNftIdRouteImport } from './routes/nft.$nftId'
 import { Route as AuthContaCarteirasRouteImport } from './routes/_auth.conta.carteiras'
 import { Route as AuthContaFavoritosRouteImport } from './routes/_auth.conta.favoritos'
 import { Route as AuthContaPerfilRouteImport } from './routes/_auth.conta.perfil'
+import { Route as AuthPedidoOrderIdRouteImport } from './routes/_auth.pedido.$orderId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -81,6 +82,11 @@ const AuthContaPerfilRoute = AuthContaPerfilRouteImport.update({
   path: '/conta/perfil',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthPedidoOrderIdRoute = AuthPedidoOrderIdRouteImport.update({
+  id: '/pedido/$orderId',
+  path: '/pedido/$orderId',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/conta/carteiras': typeof AuthContaCarteirasRoute
   '/conta/favoritos': typeof AuthContaFavoritosRoute
   '/conta/perfil': typeof AuthContaPerfilRoute
+  '/pedido/$orderId': typeof AuthPedidoOrderIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/conta/carteiras': typeof AuthContaCarteirasRoute
   '/conta/favoritos': typeof AuthContaFavoritosRoute
   '/conta/perfil': typeof AuthContaPerfilRoute
+  '/pedido/$orderId': typeof AuthPedidoOrderIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/_auth/conta/carteiras': typeof AuthContaCarteirasRoute
   '/_auth/conta/favoritos': typeof AuthContaFavoritosRoute
   '/_auth/conta/perfil': typeof AuthContaPerfilRoute
+  '/_auth/pedido/$orderId': typeof AuthPedidoOrderIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
     | '/conta/carteiras'
     | '/conta/favoritos'
     | '/conta/perfil'
+    | '/pedido/$orderId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/conta/carteiras'
     | '/conta/favoritos'
     | '/conta/perfil'
+    | '/pedido/$orderId'
   id:
     | '__root__'
     | '/'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/_auth/conta/carteiras'
     | '/_auth/conta/favoritos'
     | '/_auth/conta/perfil'
+    | '/_auth/pedido/$orderId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -263,6 +275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthContaPerfilRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/pedido/$orderId': {
+      id: '/_auth/pedido/$orderId'
+      path: '/pedido/$orderId'
+      fullPath: '/pedido/$orderId'
+      preLoaderRoute: typeof AuthPedidoOrderIdRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
@@ -271,6 +290,7 @@ interface AuthRouteChildren {
   AuthContaCarteirasRoute: typeof AuthContaCarteirasRoute
   AuthContaFavoritosRoute: typeof AuthContaFavoritosRoute
   AuthContaPerfilRoute: typeof AuthContaPerfilRoute
+  AuthPedidoOrderIdRoute: typeof AuthPedidoOrderIdRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -278,6 +298,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthContaCarteirasRoute: AuthContaCarteirasRoute,
   AuthContaFavoritosRoute: AuthContaFavoritosRoute,
   AuthContaPerfilRoute: AuthContaPerfilRoute,
+  AuthPedidoOrderIdRoute: AuthPedidoOrderIdRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
