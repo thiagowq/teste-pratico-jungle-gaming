@@ -24,8 +24,15 @@ function useHeaderDivider() {
   return pathname === '/' || pathname === '/entrar' || pathname === '/cadastro' || pathname.startsWith('/conta')
 }
 
+/** Telas com barra de ação própria no mobile (detalhe, carrinho, pagamento): sem barra inferior e rodapé. */
+function useImmersiveMobile() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  return /^\/(nft|carrinho|pagamento)/.test(pathname)
+}
+
 function RootLayout() {
   const divider = useHeaderDivider()
+  const immersive = useImmersiveMobile()
   return (
     <TooltipProvider delayDuration={300}>
       <HeadContent />
@@ -39,8 +46,8 @@ function RootLayout() {
       <div id="conteudo" tabIndex={-1} className="outline-none">
         <Outlet />
       </div>
-      <SiteFooter />
-      <MobileTabBar />
+      <SiteFooter className={immersive ? 'max-md:hidden' : undefined} />
+      {!immersive && <MobileTabBar />}
       <Toaster position="top-center" richColors closeButton />
     </TooltipProvider>
   )

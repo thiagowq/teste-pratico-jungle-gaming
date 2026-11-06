@@ -13,6 +13,8 @@ interface NftCardProps {
   priority?: boolean
   /** Ações extras no rodapé da imagem (ex.: adicionar ao carrinho). */
   actions?: React.ReactNode
+  /** `sm`: variante dos carrosséis (nome 15/20, preço 16). */
+  size?: 'md' | 'sm'
   className?: string
 }
 
@@ -33,7 +35,7 @@ function Badge({ className }: { className?: string }) {
  * Card do NFT. Desktop (≥ 768px): caixa 258×300 com arte 250×250 e ações no
  * hover/foco. Mobile: caixa com gradiente, arte arredondada e favorito no canto.
  */
-export function NftCard({ nft, imageSizes, priority, actions, className }: NftCardProps) {
+export function NftCard({ nft, imageSizes, priority, actions, size = 'md', className }: NftCardProps) {
   const unavailable = nft.available === 0
   return (
     <article className={cn('group relative', className)} aria-labelledby={`nft-${nft.id}-name`}>
@@ -81,8 +83,11 @@ export function NftCard({ nft, imageSizes, priority, actions, className }: NftCa
         <FavoriteButton nftId={nft.id} nftName={nft.name} variant="round" className="absolute top-5 right-3 z-10 md:hidden" />
       </div>
 
-      <div className="mt-3 flex flex-col gap-3 max-md:mt-2 max-md:gap-0 max-md:pl-2">
-        <h3 id={`nft-${nft.id}-name`} className="text-base leading-4 max-md:text-[15px] max-md:leading-5">
+      <div className={cn('mt-3 flex flex-col max-md:mt-2 max-md:gap-0 max-md:pl-2', size === 'sm' ? 'gap-0' : 'gap-3')}>
+        <h3
+          id={`nft-${nft.id}-name`}
+          className={cn('text-base leading-4 max-md:text-[15px] max-md:leading-5', size === 'sm' && 'text-[15px] leading-5')}
+        >
           <Link
             to="/nft/$nftId"
             params={{ nftId: nft.id }}
@@ -91,7 +96,12 @@ export function NftCard({ nft, imageSizes, priority, actions, className }: NftCa
             {nft.name}
           </Link>
         </h3>
-        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-lg leading-4 whitespace-nowrap max-md:gap-x-2 max-md:text-base">
+        <p
+          className={cn(
+            'flex flex-wrap items-center gap-x-3 gap-y-1 text-lg leading-4 whitespace-nowrap max-md:gap-x-2 max-md:text-base',
+            size === 'sm' && 'text-base',
+          )}
+        >
           <span className="font-bold text-brand-accent">
             <span className="sr-only">Preço: </span>
             {formatEth(nft.priceEth)}

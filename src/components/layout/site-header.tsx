@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { logout, useSession } from '@/features/auth/session'
+import { useCartCount } from '@/features/cart/use-cart'
 import { cn } from '@/lib/utils'
 import { Container } from './container'
 
@@ -36,8 +37,9 @@ const NAV_ITEMS: Array<{ key: NavKey; label: string; hash?: string; secao?: stri
   { key: 'learn', label: 'Aprenda', secao: 'aprenda' },
 ]
 
-export function SiteHeader({ cartCount = 0, divider = false }: { cartCount?: number; divider?: boolean }) {
+export function SiteHeader({ divider = false }: { divider?: boolean }) {
   const active = useActiveNav()
+  const cartCount = useCartCount()
   const [searchOpen, setSearchOpen] = useState(false)
 
   return (

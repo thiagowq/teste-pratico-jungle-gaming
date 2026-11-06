@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { toApiError } from './errors'
+import { getGuestCartId } from './cart-identity'
 import { getSessionToken } from './session-token'
 
 export const api = axios.create({
@@ -13,6 +14,8 @@ export const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = getSessionToken()
   if (token) config.headers.set('Authorization', `Bearer ${token}`)
+  // Visitantes têm carrinho próprio, identificado por um id local.
+  else config.headers.set('X-Guest-Cart', getGuestCartId())
   return config
 })
 

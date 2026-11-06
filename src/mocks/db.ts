@@ -1,6 +1,16 @@
+import type { EditionId } from '@/api/contracts/catalog'
 import { buildNftFixtures, type NftRecord } from './fixtures/nfts'
 import { buildUserFixtures, type UserRecord } from './fixtures/users'
 import { createPersistentState } from './lib/persist'
+
+/** Linha do carrinho como o servidor guarda: preço registrado no momento da inclusão. */
+export interface CartLineRecord {
+  nftId: string
+  editionId: EditionId
+  quantity: number
+  priceAtAddEth: string
+  addedAt: string
+}
 
 export interface SessionRecord {
   userId: string
@@ -19,6 +29,8 @@ export interface MockDatabase {
   /** Ordem original do catálogo (desempate estável na ordenação). */
   nftOrder: string[]
   favorites: Record<string, string[]>
+  /** Carrinhos por dono: `user:<id>` ou `guest:<uuid>`. */
+  carts: Record<string, CartLineRecord[]>
 }
 
 function seed(): MockDatabase {
@@ -29,7 +41,8 @@ function seed(): MockDatabase {
     nfts: Object.fromEntries(nfts.map((nft) => [nft.id, nft])),
     nftOrder: nfts.map((nft) => nft.id),
     favorites: { 'user-ana': ['sage-nomad-009'] },
+    carts: {},
   }
 }
 
-export const db = createPersistentState<MockDatabase>('db:v1', seed)
+export const db = createPersistentState<MockDatabase>('db:v2', seed)
