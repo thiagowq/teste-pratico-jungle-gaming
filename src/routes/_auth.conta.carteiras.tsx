@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { Container } from '@/components/layout/container'
 
 // TEMPORÁRIO: substituído pela implementação na branch da funcionalidade.
-export const Route = createFileRoute('/conta/carteiras')({
+export const Route = createFileRoute('/_auth/conta/carteiras')({
   validateSearch: z.object({ redirect: z.string().optional().catch(undefined) }),
   component: () => (
     <main className="py-24">

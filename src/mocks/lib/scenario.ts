@@ -8,9 +8,7 @@ import type { ApiErrorCode } from '@/api/errors'
 export type NetworkProfile = 'instant' | 'normal' | 'slow' | 'variable'
 
 export type Fault =
-  | { kind: 'http'; status: number; code: ApiErrorCode; message?: string }
-  | { kind: 'timeout' }
-  | { kind: 'offline' }
+  { kind: 'http'; status: number; code: ApiErrorCode; message?: string } | { kind: 'timeout' } | { kind: 'offline' }
 
 export interface FaultRule {
   fault: Fault

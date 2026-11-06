@@ -16,7 +16,11 @@ const SIZES = {
   // Detalhe desktop: botões 33×50, número 20/28.
   lg: { button: 'h-[50px] w-[33px] rounded-[33px]', icon: 'w-[15px]', value: 'min-w-[13px] text-xl leading-7' },
   // Detalhe mobile: botões 20×30, número 18/25.
-  md: { button: 'h-[30px] w-5 rounded-[20px]', icon: 'w-2.5', value: 'min-w-[11px] text-lg leading-[25px] font-medium' },
+  md: {
+    button: 'h-[30px] w-5 rounded-[20px]',
+    icon: 'w-2.5',
+    value: 'min-w-[11px] text-lg leading-[25px] font-medium',
+  },
   // Carrinho: botões 20×30 compactos.
   sm: { button: 'h-[26px] w-[18px] rounded-[20px]', icon: 'w-2', value: 'min-w-4 text-base leading-5' },
 } as const
@@ -35,7 +39,16 @@ function Plus({ className }: { className: string }) {
 }
 
 /** Controle de quantidade inteira no estilo do Figma (botões em pílula laranja). */
-export function QuantityStepper({ value, min = 1, max, onChange, itemName, size = 'lg', disabled, className }: QuantityStepperProps) {
+export function QuantityStepper({
+  value,
+  min = 1,
+  max,
+  onChange,
+  itemName,
+  size = 'lg',
+  disabled,
+  className,
+}: QuantityStepperProps) {
   const style = SIZES[size]
   const button = cn(
     'grid shrink-0 place-items-center border border-ink bg-brand shadow-card transition-[filter,opacity] hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40',
@@ -52,7 +65,11 @@ export function QuantityStepper({ value, min = 1, max, onChange, itemName, size 
       >
         <Minus className={style.icon} />
       </button>
-      <output aria-live="polite" aria-label={`Quantidade: ${value}`} className={cn('text-center tabular-nums', style.value)}>
+      <output
+        aria-live="polite"
+        aria-label={`Quantidade: ${value}`}
+        className={cn('text-center tabular-nums', style.value)}
+      >
         {value}
       </output>
       <button

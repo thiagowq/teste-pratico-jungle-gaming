@@ -2,10 +2,34 @@ import { Link } from '@tanstack/react-router'
 import { NftImage, type NftArtwork } from '@/components/nft-image'
 
 const POSTS: Array<{ date: string; minutes: number; title: string; text: string; artwork: NftArtwork }> = [
-  { date: '12 de setembro', minutes: 6, title: 'Como funciona a propriedade de NFTs', text: 'Aprenda a colecionar, negociar e verificar ativos digitais.', artwork: 'ape-baron' },
-  { date: '13 de setembro', minutes: 2, title: '10 artistas digitais para acompanhar', text: 'Conheça criadores que moldam a cultura digital.', artwork: 'ape-emerald' },
-  { date: '15 de setembro', minutes: 3, title: 'Raridade, atributos e procedência', text: 'Entenda raridade, procedência, direitos autorais e utilidade.', artwork: 'gorilla-nomad' },
-  { date: '15 de setembro', minutes: 2, title: 'Como proteger sua carteira', text: 'Proteja sua carteira, seus ativos e sua identidade.', artwork: 'ape-golden' },
+  {
+    date: '12 de setembro',
+    minutes: 6,
+    title: 'Como funciona a propriedade de NFTs',
+    text: 'Aprenda a colecionar, negociar e verificar ativos digitais.',
+    artwork: 'ape-baron',
+  },
+  {
+    date: '13 de setembro',
+    minutes: 2,
+    title: '10 artistas digitais para acompanhar',
+    text: 'Conheça criadores que moldam a cultura digital.',
+    artwork: 'ape-emerald',
+  },
+  {
+    date: '15 de setembro',
+    minutes: 3,
+    title: 'Raridade, atributos e procedência',
+    text: 'Entenda raridade, procedência, direitos autorais e utilidade.',
+    artwork: 'gorilla-nomad',
+  },
+  {
+    date: '15 de setembro',
+    minutes: 2,
+    title: 'Como proteger sua carteira',
+    text: 'Proteja sua carteira, seus ativos e sua identidade.',
+    artwork: 'ape-golden',
+  },
 ]
 
 /** "Diário da Cunhagem": conteúdo editorial fora do escopo; os links levam à página "em breve". */
@@ -25,7 +49,12 @@ export function Blog() {
           <li key={post.title}>
             <article className="relative flex h-full flex-col overflow-hidden rounded-lg bg-surface-card">
               <div className="h-[195px] overflow-hidden">
-                <NftImage artwork={post.artwork} alt="" sizes="(min-width: 1024px) 268px, (min-width: 640px) 50vw, 100vw" className="size-full object-[50%_30%]" />
+                <NftImage
+                  artwork={post.artwork}
+                  alt=""
+                  sizes="(min-width: 1024px) 268px, (min-width: 640px) 50vw, 100vw"
+                  className="size-full object-[50%_30%]"
+                />
               </div>
               <div className="flex flex-1 flex-col gap-2 px-4 pt-3 pb-4">
                 <p className="text-xs leading-4 font-medium text-text-secondary">

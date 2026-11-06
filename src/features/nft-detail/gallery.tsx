@@ -17,7 +17,21 @@ const VIEWS = [
   { label: 'Fundo e composição', className: 'scale-[1.25] object-[50%_50%]' },
 ]
 
-function Framed({ artwork, view, sizes, priority, alt, className }: { artwork: Artwork; view: number; sizes: string; priority?: boolean; alt: string; className?: string }) {
+function Framed({
+  artwork,
+  view,
+  sizes,
+  priority,
+  alt,
+  className,
+}: {
+  artwork: Artwork
+  view: number
+  sizes: string
+  priority?: boolean
+  alt: string
+  className?: string
+}) {
   return (
     <div className={cn('overflow-hidden', className)}>
       <NftImage
@@ -31,7 +45,17 @@ function Framed({ artwork, view, sizes, priority, alt, className }: { artwork: A
   )
 }
 
-export function DesktopGallery({ artworks, name, current, onSelect }: { artworks: Artwork[]; name: string; current: number; onSelect: (index: number) => void }) {
+export function DesktopGallery({
+  artworks,
+  name,
+  current,
+  onSelect,
+}: {
+  artworks: Artwork[]
+  name: string
+  current: number
+  onSelect: (index: number) => void
+}) {
   const [zoomOpen, setZoomOpen] = useState(false)
   return (
     <div className="flex items-center gap-7">
@@ -76,7 +100,17 @@ export function DesktopGallery({ artworks, name, current, onSelect }: { artworks
   )
 }
 
-export function MobileGallery({ artworks, name, current, onSelect }: { artworks: Artwork[]; name: string; current: number; onSelect: (index: number) => void }) {
+export function MobileGallery({
+  artworks,
+  name,
+  current,
+  onSelect,
+}: {
+  artworks: Artwork[]
+  name: string
+  current: number
+  onSelect: (index: number) => void
+}) {
   return (
     <div className="flex flex-col items-center gap-3">
       <Framed
@@ -97,7 +131,12 @@ export function MobileGallery({ artworks, name, current, onSelect }: { artworks:
             aria-current={index === current ? 'true' : undefined}
             className="grid h-6 place-items-center px-1"
           >
-            <span className={cn('block h-[7px] rounded-full bg-brand transition-all', index === current ? 'w-7' : 'w-[7px]')} />
+            <span
+              className={cn(
+                'block h-[7px] rounded-full bg-brand transition-all',
+                index === current ? 'w-7' : 'w-[7px]',
+              )}
+            />
           </button>
         ))}
       </div>
@@ -105,13 +144,31 @@ export function MobileGallery({ artworks, name, current, onSelect }: { artworks:
   )
 }
 
-function ZoomDialog({ open, onOpenChange, artwork, view, name }: { open: boolean; onOpenChange: (open: boolean) => void; artwork: Artwork; view: number; name: string }) {
+function ZoomDialog({
+  open,
+  onOpenChange,
+  artwork,
+  view,
+  name,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  artwork: Artwork
+  view: number
+  name: string
+}) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[min(92vw,820px)] p-4 sm:max-w-[min(92vw,820px)]">
         <DialogTitle className="sr-only">{name}</DialogTitle>
         <DialogDescription className="sr-only">Imagem ampliada: {VIEWS[view % VIEWS.length].label}</DialogDescription>
-        <Framed artwork={artwork} view={view} sizes="820px" alt={`${name} ampliado`} className="aspect-square w-full rounded-2xl" />
+        <Framed
+          artwork={artwork}
+          view={view}
+          sizes="820px"
+          alt={`${name} ampliado`}
+          className="aspect-square w-full rounded-2xl"
+        />
       </DialogContent>
     </Dialog>
   )

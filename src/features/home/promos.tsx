@@ -2,7 +2,13 @@ import { Link } from '@tanstack/react-router'
 import { ArrowRightIcon } from '@/components/icons'
 import { NftImage, type NftArtwork } from '@/components/nft-image'
 
-const PROMOS: Array<{ title: [string, string]; text: string; artwork: NftArtwork; tab: 'new' | 'trending'; cta: string }> = [
+const PROMOS: Array<{
+  title: [string, string]
+  text: string
+  artwork: NftArtwork
+  tab: 'new' | 'trending'
+  cta: string
+}> = [
   {
     title: ['Lançamentos gênesis', 'de edição limitada'],
     text: 'Colecione edições escassas diretamente dos criadores antes da revelação pública.',
@@ -23,9 +29,18 @@ export function Promos() {
   return (
     <section aria-label="Coleções em destaque" className="grid gap-7 lg:grid-cols-2">
       {PROMOS.map((promo) => (
-        <article key={promo.tab} className="relative flex h-[250px] overflow-hidden rounded-lg bg-surface-card max-sm:h-auto max-sm:flex-col">
-          <span aria-hidden className="absolute -bottom-[148px] -left-[191px] size-64 rounded-full border-2 border-brand" />
-          <span aria-hidden className="absolute -bottom-[140px] -left-[199px] size-64 rounded-full border border-brand" />
+        <article
+          key={promo.tab}
+          className="relative flex h-[250px] overflow-hidden rounded-lg bg-surface-card max-sm:h-auto max-sm:flex-col"
+        >
+          <span
+            aria-hidden
+            className="absolute -bottom-[148px] -left-[191px] size-64 rounded-full border-2 border-brand"
+          />
+          <span
+            aria-hidden
+            className="absolute -bottom-[140px] -left-[199px] size-64 rounded-full border border-brand"
+          />
           <div className="relative w-1/2 shrink-0 overflow-hidden rounded-[18px] max-sm:aspect-square max-sm:w-full lg:w-[292px]">
             <NftImage artwork={promo.artwork} alt="" sizes="(min-width: 1024px) 292px, 50vw" className="size-full" />
           </div>

@@ -21,7 +21,8 @@ interface MobileCatalogBarProps {
 export function MobileCatalogBar({ params, facets, total, onChange }: MobileCatalogBarProps) {
   const [term, setTerm] = useState(params.q ?? '')
   const [open, setOpen] = useState(false)
-  const activeFilters = (params.categories?.length ?? 0) + (params.networks?.length ?? 0) + (params.minPrice || params.maxPrice ? 1 : 0)
+  const activeFilters =
+    (params.categories?.length ?? 0) + (params.networks?.length ?? 0) + (params.minPrice || params.maxPrice ? 1 : 0)
 
   // Mantém o campo em sincronia quando a busca muda pela URL (voltar/avançar).
   const [lastQ, setLastQ] = useState(params.q)
@@ -39,7 +40,11 @@ export function MobileCatalogBar({ params, facets, total, onChange }: MobileCata
 
   return (
     <div className="flex gap-2 lg:hidden">
-      <form role="search" className="flex h-[45px] flex-1 items-center gap-2 rounded-[10px] bg-surface-card px-3 md:hidden" onSubmit={(event) => event.preventDefault()}>
+      <form
+        role="search"
+        className="flex h-[45px] flex-1 items-center gap-2 rounded-[10px] bg-surface-card px-3 md:hidden"
+        onSubmit={(event) => event.preventDefault()}
+      >
         <SearchIcon aria-hidden className="size-[22px] shrink-0" color="var(--kurio-secondary)" />
         <label htmlFor="mobile-search" className="sr-only">
           Explorar coleções
@@ -63,14 +68,20 @@ export function MobileCatalogBar({ params, facets, total, onChange }: MobileCata
       >
         <FilterButtonIcon aria-hidden />
         {activeFilters > 0 && (
-          <span aria-hidden className="absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-foreground text-[10px] font-bold text-ink">
+          <span
+            aria-hidden
+            className="absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-foreground text-[10px] font-bold text-ink"
+          >
             {activeFilters}
           </span>
         )}
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-3xl border-border bg-surface-card">
+        <SheetContent
+          side="bottom"
+          className="max-h-[85dvh] overflow-y-auto rounded-t-3xl border-border bg-surface-card"
+        >
           <SheetHeader>
             <SheetTitle>Filtros</SheetTitle>
             <SheetDescription>Combine coleções, preço e rede. Os resultados atualizam na hora.</SheetDescription>

@@ -137,7 +137,12 @@ export function CatalogFilters({ params, facets, onChange, className }: CatalogF
           Faixa de preço
         </h2>
         {/* `key` reinicia o rascunho quando a faixa aplicada muda pela URL. */}
-        <PriceFilter key={`${params.minPrice}-${params.maxPrice}`} params={params} facets={facets} onChange={onChange} />
+        <PriceFilter
+          key={`${params.minPrice}-${params.maxPrice}`}
+          params={params}
+          facets={facets}
+          onChange={onChange}
+        />
       </section>
 
       <section aria-labelledby="filter-network" className="flex flex-col gap-3">
@@ -159,7 +164,9 @@ export function CatalogFilters({ params, facets, onChange, className }: CatalogF
         <Button
           variant="link"
           className="w-fit"
-          onClick={() => onChange({ categories: undefined, networks: undefined, minPrice: undefined, maxPrice: undefined })}
+          onClick={() =>
+            onChange({ categories: undefined, networks: undefined, minPrice: undefined, maxPrice: undefined })
+          }
         >
           Limpar filtros
         </Button>

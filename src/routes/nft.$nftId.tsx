@@ -18,6 +18,7 @@ import { DesktopGallery, MobileGallery } from '@/features/nft-detail/gallery'
 import { ShareLinks } from '@/features/nft-detail/share-links'
 import { defaultEditionId, usePurchase } from '@/features/nft-detail/use-purchase'
 import { formatEth } from '@/lib/format'
+import { DESKTOP_QUERY, useMediaQuery } from '@/lib/use-media-query'
 
 const searchSchema = z.object({
   edicao: editionIdSchema.optional().catch(undefined),
@@ -64,11 +65,18 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
   const editionId: EditionId = search.edicao ?? defaultEditionId(nft)
   const tab: DetailTab = search.aba ?? 'detalhes'
   const purchase = usePurchase(nft, editionId)
+  // Renderiza só a versão da largura atual (sem conteúdo e IDs duplicados).
+  const isDesktop = useMediaQuery(DESKTOP_QUERY)
   const { edition } = purchase
 
-  const setEdition = (id: EditionId) => void navigate({ search: (previous) => ({ ...previous, edicao: id }), replace: true, resetScroll: false })
+  const setEdition = (id: EditionId) =>
+    void navigate({ search: (previous) => ({ ...previous, edicao: id }), replace: true, resetScroll: false })
   const setTab = (next: DetailTab) =>
-    void navigate({ search: (previous) => ({ ...previous, aba: next === 'detalhes' ? undefined : next }), replace: true, resetScroll: false })
+    void navigate({
+      search: (previous) => ({ ...previous, aba: next === 'detalhes' ? undefined : next }),
+      replace: true,
+      resetScroll: false,
+    })
   const openReviews = () => {
     setTab('avaliacoes')
     document.getElementById('abas-detalhe')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -109,156 +117,172 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
   return (
     <main className="max-md:pb-[180px]">
       {/* ---------- Desktop / tablet ---------- */}
-      <Container className="hidden pt-8 md:block">
-        <nav aria-label="Trilha de navegação" className="text-[15px] leading-4 font-bold">
-          <Link to="/" className="hover:text-brand-accent">
-            Início
-          </Link>
-          <span aria-hidden> / </span>
-          <Link to="/" hash="mercado" className="hover:text-brand-accent">
-            Mercado
-          </Link>
-        </nav>
+      {isDesktop ? (
+        <Container className="pt-8">
+          <nav aria-label="Trilha de navegação" className="text-[15px] leading-4 font-bold">
+            <Link to="/" className="hover:text-brand-accent">
+              Início
+            </Link>
+            <span aria-hidden> / </span>
+            <Link to="/" hash="mercado" className="hover:text-brand-accent">
+              Mercado
+            </Link>
+          </nav>
 
-        <div className="mt-3 grid gap-8 lg:grid-cols-[573px_1fr]">
-          <DesktopGallery artworks={nft.gallery} name={nft.name} current={view} onSelect={setView} />
+          <div className="mt-3 grid gap-8 lg:grid-cols-[573px_1fr]">
+            <DesktopGallery artworks={nft.gallery} name={nft.name} current={view} onSelect={setView} />
 
-          <section aria-labelledby="nft-title" className="flex flex-col justify-between gap-5">
-            <div className="flex flex-col gap-3 border-b border-brand/40 pb-3">
-              <h1 id="nft-title" className="text-[28px] leading-[37px] font-bold">
+            <section aria-labelledby="nft-title" className="flex flex-col justify-between gap-5">
+              <div className="flex flex-col gap-3 border-b border-brand/40 pb-3">
+                <h1 id="nft-title" className="text-[28px] leading-[37px] font-bold">
+                  {nft.name}
+                </h1>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span className="text-[22px] leading-4">{price}</span>
+                  <button
+                    type="button"
+                    onClick={openReviews}
+                    className="flex items-center gap-1 text-[15px] leading-5 hover:text-brand-accent"
+                  >
+                    <RatingStars average={nft.rating.average} />
+                    {nft.rating.count} avaliações de colecionadores
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3">
+                <h2 className="text-[15px] leading-4 font-bold">Sobre este NFT:</h2>
+                <p className="text-sm leading-6 text-text-secondary">{nft.description}</p>
+              </div>
+              <EditionPicker editions={nft.editions} selected={edition.id} onSelect={setEdition} />
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <QuantityStepper
+                  value={purchase.quantity}
+                  max={Math.max(purchase.limit, 1)}
+                  onChange={purchase.setQuantity}
+                  itemName={nft.name}
+                  disabled={purchase.blockedReason !== null}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    className="w-[130px]"
+                    onClick={() => purchase.submit(true)}
+                    disabled={purchase.blockedReason !== null}
+                    aria-busy={purchase.isAdding}
+                    aria-describedby="purchase-hint"
+                  >
+                    {purchase.isAdding ? 'ADICIONANDO…' : 'COMPRAR'}
+                  </Button>
+                  <FavoriteButton nftId={nft.id} nftName={nft.name} variant="full" className="w-[130px]" />
+                </div>
+              </div>
+              <p
+                id="purchase-hint"
+                className={purchase.blockedReason ? 'text-sm text-coral' : 'text-xs text-text-secondary'}
+                aria-live="polite"
+              >
+                {purchase.hint}
+              </p>
+              {tokenInfo}
+              <ShareLinks name={nft.name} />
+            </section>
+          </div>
+
+          <div className="mt-24">
+            <DetailTabs nft={nft} tab={tab} onTabChange={setTab} />
+          </div>
+          <div className="mt-24">
+            <NftCarousel title="Mais desta coleção" items={nft.related} headingId="related-heading" />
+          </div>
+        </Container>
+      ) : (
+        /* ---------- Mobile ---------- */
+        <div>
+          <div className="bg-linear-to-b from-surface-card to-surface-raised px-7 pt-6 pb-[90px]">
+            <div className="mb-2 flex items-center justify-between">
+              <BackButton />
+              <FavoriteButton
+                nftId={nft.id}
+                nftName={nft.name}
+                variant="round"
+                className="size-[35px] rounded-full border-border bg-surface-raised text-brand-accent"
+              />
+            </div>
+            <MobileGallery artworks={nft.gallery} name={nft.name} current={view} onSelect={setView} />
+          </div>
+          <section
+            aria-labelledby="nft-title"
+            className="-mt-[114px] flex flex-col gap-3 rounded-t-[31px] bg-surface-card px-6 pt-8 pb-6"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h1 id="nft-title" className="text-xl leading-4 font-bold">
                 {nft.name}
               </h1>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="text-[22px] leading-4">{price}</span>
-                <button type="button" onClick={openReviews} className="flex items-center gap-1 text-[15px] leading-5 hover:text-brand-accent">
-                  <RatingStars average={nft.rating.average} />
-                  {nft.rating.count} avaliações de colecionadores
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={openReviews}
+                className="flex h-[27px] items-center gap-1 rounded-[32px] border border-brand px-1.5 text-sm"
+                aria-label={`Avaliação ${nft.rating.average.toLocaleString('pt-BR')} de 5, ${nft.rating.count} avaliações`}
+              >
+                <StarIcon aria-hidden className="size-3.5" color="var(--kurio-amber)" />
+                <span className="font-medium">{nft.rating.average.toLocaleString('pt-BR')}</span>
+                <span className="text-text-secondary">({nft.rating.count})</span>
+              </button>
             </div>
-            <div className="flex flex-col gap-3">
-              <h2 className="text-[15px] leading-4 font-bold">Sobre este NFT:</h2>
-              <p className="text-sm leading-6 text-text-secondary">{nft.description}</p>
-            </div>
+            <p className="text-sm leading-6 text-text-secondary">{nft.description}</p>
             <EditionPicker editions={nft.editions} selected={edition.id} onSelect={setEdition} />
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <QuantityStepper
-                value={purchase.quantity}
-                max={Math.max(purchase.limit, 1)}
-                onChange={purchase.setQuantity}
-                itemName={nft.name}
-                disabled={purchase.blockedReason !== null}
-              />
-              <div className="flex gap-2">
-                <Button
-                  className="w-[130px]"
-                  onClick={() => purchase.submit(true)}
-                  disabled={purchase.blockedReason !== null}
-                  aria-busy={purchase.isAdding}
-                  aria-describedby="purchase-hint"
-                >
-                  {purchase.isAdding ? 'ADICIONANDO…' : 'COMPRAR'}
-                </Button>
-                <FavoriteButton nftId={nft.id} nftName={nft.name} variant="full" className="w-[130px]" />
-              </div>
-            </div>
-            <p id="purchase-hint" className={purchase.blockedReason ? 'text-sm text-coral' : 'text-xs text-text-secondary'} aria-live="polite">
+            {tokenInfo}
+            <p
+              className={purchase.blockedReason ? 'text-sm text-coral' : 'text-xs text-text-secondary'}
+              aria-live="polite"
+            >
               {purchase.hint}
             </p>
-            {tokenInfo}
-            <ShareLinks name={nft.name} />
           </section>
-        </div>
-
-        <div className="mt-24">
-          <DetailTabs nft={nft} tab={tab} onTabChange={setTab} />
-        </div>
-        <div className="mt-24">
-          <NftCarousel title="Mais desta coleção" items={nft.related} headingId="related-heading" />
-        </div>
-      </Container>
-
-      {/* ---------- Mobile ---------- */}
-      <div className="md:hidden">
-        <div className="bg-linear-to-b from-surface-card to-surface-raised px-7 pt-6 pb-[90px]">
-          <div className="mb-2 flex items-center justify-between">
-            <BackButton />
-            <FavoriteButton
-              nftId={nft.id}
-              nftName={nft.name}
-              variant="round"
-              className="size-[35px] rounded-full border-border bg-surface-raised text-brand-accent"
-            />
-          </div>
-          <MobileGallery artworks={nft.gallery} name={nft.name} current={view} onSelect={setView} />
-        </div>
-        <section aria-labelledby="nft-title-mobile" className="-mt-[114px] flex flex-col gap-3 rounded-t-[31px] bg-surface-card px-6 pt-8 pb-6">
-          <div className="flex items-center justify-between gap-3">
-            <h1 id="nft-title-mobile" className="text-xl leading-4 font-bold">
-              {nft.name}
-            </h1>
-            <button
-              type="button"
-              onClick={openReviews}
-              className="flex h-[27px] items-center gap-1 rounded-[32px] border border-brand px-1.5 text-sm"
-              aria-label={`Avaliação ${nft.rating.average.toLocaleString('pt-BR')} de 5, ${nft.rating.count} avaliações`}
-            >
-              <StarIcon aria-hidden className="size-3.5" color="var(--kurio-amber)" />
-              <span className="font-medium">{nft.rating.average.toLocaleString('pt-BR')}</span>
-              <span className="text-text-secondary">({nft.rating.count})</span>
-            </button>
-          </div>
-          <p className="text-sm leading-6 text-text-secondary">{nft.description}</p>
-          <EditionPicker editions={nft.editions} selected={edition.id} onSelect={setEdition} />
-          {tokenInfo}
-          <p className={purchase.blockedReason ? 'text-sm text-coral' : 'text-xs text-text-secondary'} aria-live="polite">
-            {purchase.hint}
-          </p>
-        </section>
-        <div className="px-6 pt-8 pb-6">
-          <DetailTabs nft={nft} tab={tab} onTabChange={setTab} />
-          <div className="mt-12">
-            <NftCarousel title="Mais desta coleção" items={nft.related} headingId="related-heading-mobile" />
-          </div>
-        </div>
-
-        <div className="fixed inset-x-0 bottom-0 z-40 rounded-t-[40px] bg-surface-card px-6 pt-5 pb-[max(36px,env(safe-area-inset-bottom))] shadow-overlay">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-[15px] leading-4 font-medium text-text-secondary">Qtd.</span>
-              <QuantityStepper
-                size="md"
-                value={purchase.quantity}
-                max={Math.max(purchase.limit, 1)}
-                onChange={purchase.setQuantity}
-                itemName={nft.name}
-                disabled={purchase.blockedReason !== null}
-              />
+          <div className="px-6 pt-8 pb-6">
+            <DetailTabs nft={nft} tab={tab} onTabChange={setTab} />
+            <div className="mt-12">
+              <NftCarousel title="Mais desta coleção" items={nft.related} headingId="related-heading" />
             </div>
-            <span className="text-xl leading-4">{price}</span>
           </div>
-          <div className="mt-5 flex items-center gap-3">
-            <Button
-              variant="pill"
-              className="h-15 w-[196px] text-base"
-              onClick={() => purchase.submit(true)}
-              disabled={purchase.blockedReason !== null}
-              aria-busy={purchase.isAdding}
-            >
-              Comprar NFT
-            </Button>
-            <button
-              type="button"
-              onClick={() => purchase.submit(false)}
-              disabled={purchase.blockedReason !== null || purchase.isAdding}
-              aria-label={`Adicionar ${nft.name} ao carrinho`}
-              className="grid size-15 place-items-center rounded-full border border-border bg-surface-raised disabled:opacity-40"
-            >
-              <ShopIcon aria-hidden className="size-5" color="var(--kurio-secondary)" />
-            </button>
+
+          <div className="fixed inset-x-0 bottom-0 z-40 rounded-t-[40px] bg-surface-card px-6 pt-5 pb-[max(36px,env(safe-area-inset-bottom))] shadow-overlay">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-[15px] leading-4 font-medium text-text-secondary">Qtd.</span>
+                <QuantityStepper
+                  size="md"
+                  value={purchase.quantity}
+                  max={Math.max(purchase.limit, 1)}
+                  onChange={purchase.setQuantity}
+                  itemName={nft.name}
+                  disabled={purchase.blockedReason !== null}
+                />
+              </div>
+              <span className="text-xl leading-4">{price}</span>
+            </div>
+            <div className="mt-5 flex items-center gap-3">
+              <Button
+                variant="pill"
+                className="h-15 w-[196px] text-base"
+                onClick={() => purchase.submit(true)}
+                disabled={purchase.blockedReason !== null}
+                aria-busy={purchase.isAdding}
+              >
+                Comprar NFT
+              </Button>
+              <button
+                type="button"
+                onClick={() => purchase.submit(false)}
+                disabled={purchase.blockedReason !== null || purchase.isAdding}
+                aria-label={`Adicionar ${nft.name} ao carrinho`}
+                className="grid size-15 place-items-center rounded-full border border-border bg-surface-raised disabled:opacity-40"
+              >
+                <ShopIcon aria-hidden className="size-5" color="var(--kurio-secondary)" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </main>
   )
 }
@@ -324,7 +348,9 @@ function NftNotFound() {
       <Container className="flex flex-col items-start gap-4">
         <p className="text-sm font-bold tracking-[0.1em] text-brand-accent">NFT INEXISTENTE</p>
         <h1 className="text-[28px] leading-[37px] font-bold">Não encontramos este NFT</h1>
-        <p className="max-w-prose text-text-secondary">Ele pode ter sido removido do mercado ou o endereço está incorreto.</p>
+        <p className="max-w-prose text-text-secondary">
+          Ele pode ter sido removido do mercado ou o endereço está incorreto.
+        </p>
         <Button asChild>
           <Link to="/" hash="mercado">
             Explorar o mercado

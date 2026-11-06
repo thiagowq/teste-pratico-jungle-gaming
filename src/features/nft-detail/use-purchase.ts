@@ -11,7 +11,9 @@ const DEFAULT_ORDER: EditionId[] = ['1-50', '1-10', 'open', '1-1']
 
 /** Edição inicial: a 1/50 (exibida no layout) ou a primeira com estoque. */
 export function defaultEditionId(nft: NftDetail): EditionId {
-  return DEFAULT_ORDER.find((id) => nft.editions.some((edition) => edition.id === id && edition.available > 0)) ?? '1-50'
+  return (
+    DEFAULT_ORDER.find((id) => nft.editions.some((edition) => edition.id === id && edition.available > 0)) ?? '1-50'
+  )
 }
 
 /**

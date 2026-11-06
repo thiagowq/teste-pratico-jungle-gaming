@@ -18,10 +18,20 @@ function Notch() {
 
 const ITEMS = [
   { to: '/', label: 'Início', icon: HomeIcon, match: (path: string) => path === '/' },
-  { to: '/conta/favoritos', label: 'Favoritos', icon: TabHeartIcon, match: (path: string) => path.startsWith('/conta/favoritos') },
+  {
+    to: '/conta/favoritos',
+    label: 'Favoritos',
+    icon: TabHeartIcon,
+    match: (path: string) => path.startsWith('/conta/favoritos'),
+  },
   null,
   { to: '/carrinho', label: 'Carrinho', icon: ShopIcon, match: (path: string) => path.startsWith('/carrinho') },
-  { to: '/conta/perfil', label: 'Conta', icon: UserBoldIcon, match: (path: string) => /^\/conta\/(perfil|carteiras)/.test(path) },
+  {
+    to: '/conta/perfil',
+    label: 'Conta',
+    icon: UserBoldIcon,
+    match: (path: string) => /^\/conta\/(perfil|carteiras)/.test(path),
+  },
 ] as const
 
 /** Barra inferior das telas mobile (< 768px), com o botão central de busca. */

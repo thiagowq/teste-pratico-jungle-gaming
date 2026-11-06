@@ -75,9 +75,7 @@ export function FavoriteButton({ nftId, nftName, className, variant = 'icon' }: 
       className={cn(
         'grid place-items-center border transition-colors',
         variant === 'round' ? 'size-7 rounded-full' : 'size-[35px] rounded-sm',
-        active
-          ? 'border-brand bg-brand text-ink'
-          : 'border-border bg-surface-raised text-brand hover:border-brand',
+        active ? 'border-brand bg-brand text-ink' : 'border-border bg-surface-raised text-brand hover:border-brand',
         className,
       )}
     >

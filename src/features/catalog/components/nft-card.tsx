@@ -80,13 +80,21 @@ export function NftCard({ nft, imageSizes, priority, actions, size = 'md', class
           </Link>
         </div>
 
-        <FavoriteButton nftId={nft.id} nftName={nft.name} variant="round" className="absolute top-5 right-3 z-10 md:hidden" />
+        <FavoriteButton
+          nftId={nft.id}
+          nftName={nft.name}
+          variant="round"
+          className="absolute top-5 right-3 z-10 md:hidden"
+        />
       </div>
 
       <div className={cn('mt-3 flex flex-col max-md:mt-2 max-md:gap-0 max-md:pl-2', size === 'sm' ? 'gap-0' : 'gap-3')}>
         <h3
           id={`nft-${nft.id}-name`}
-          className={cn('text-base leading-4 max-md:text-[15px] max-md:leading-5', size === 'sm' && 'text-[15px] leading-5')}
+          className={cn(
+            'text-base leading-4 max-md:text-[15px] max-md:leading-5',
+            size === 'sm' && 'text-[15px] leading-5',
+          )}
         >
           <Link
             to="/nft/$nftId"

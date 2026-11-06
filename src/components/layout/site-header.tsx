@@ -46,7 +46,11 @@ export function SiteHeader({ divider = false }: { divider?: boolean }) {
     <header className="hidden pt-6 md:block">
       <Container>
         <div className={cn('flex h-[45px] items-start justify-between gap-6', divider && 'border-b border-brand/40')}>
-          <Link to="/" className="mt-2 w-40 text-sm leading-[18px] font-bold tracking-[0.1em]" aria-label="Kurio, página inicial">
+          <Link
+            to="/"
+            className="mt-2 w-40 text-sm leading-[18px] font-bold tracking-[0.1em]"
+            aria-label="Kurio, página inicial"
+          >
             KURIO
           </Link>
 
@@ -85,7 +89,9 @@ export function SiteHeader({ divider = false }: { divider?: boolean }) {
             <Link
               to="/carrinho"
               className="relative grid h-9 w-10 place-items-center rounded-md hover:bg-surface-raised"
-              aria-label={cartCount > 0 ? `Carrinho, ${cartCount} ${cartCount === 1 ? 'item' : 'itens'}` : 'Carrinho vazio'}
+              aria-label={
+                cartCount > 0 ? `Carrinho, ${cartCount} ${cartCount === 1 ? 'item' : 'itens'}` : 'Carrinho vazio'
+              }
             >
               <CartIcon aria-hidden />
               {cartCount > 0 && (
@@ -141,7 +147,10 @@ function AccountButton() {
         {user.avatarUrl ? (
           <img src={user.avatarUrl} alt="" className="size-6 rounded-full object-cover" />
         ) : (
-          <span aria-hidden className="grid size-6 place-items-center rounded-full bg-brand text-[10px] font-bold text-ink">
+          <span
+            aria-hidden
+            className="grid size-6 place-items-center rounded-full bg-brand text-[10px] font-bold text-ink"
+          >
             {initials}
           </span>
         )}
