@@ -29,3 +29,6 @@ dist-ssr
 /blob-report/
 /playwright/.cache/
 .env.local
+
+# Token pessoal do Figma (nunca versionar)
+.figma-token
