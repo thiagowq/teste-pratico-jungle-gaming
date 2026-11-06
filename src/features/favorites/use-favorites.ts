@@ -39,7 +39,8 @@ export function useToggleFavorite() {
         const ids = new Set(current?.nftIds ?? [])
         if (favorite) ids.add(nftId)
         else ids.delete(nftId)
-        return { nftIds: [...ids] }
+        // A lista completa é atualizada na revalidação; aqui só some o item removido.
+        return { nftIds: [...ids], items: (current?.items ?? []).filter((item) => ids.has(item.id)) }
       })
       return { key, previous }
     },

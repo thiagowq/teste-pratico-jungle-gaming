@@ -54,3 +54,34 @@ export const registerRequest = z.object({
   password,
 })
 export type RegisterRequest = z.infer<typeof registerRequest>
+
+/* ---------- Perfil ---------- */
+
+export const profileUpdate = z.object({
+  displayName: z.string().trim().min(2, 'Informe o nome de exibição.').max(40, 'Use até 40 caracteres.'),
+  username,
+  email: z.email('Informe um e-mail válido.'),
+  ensName: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^[a-z0-9-]{3,32}$/, 'Use de 3 a 32 letras minúsculas, números ou hífen.'),
+  walletNickname: z.string().trim().min(2, 'Informe o apelido da carteira.').max(30, 'Use até 30 caracteres.'),
+})
+export type ProfileUpdate = z.infer<typeof profileUpdate>
+
+export const changePasswordRequest = z.object({
+  currentPassword: z.string().min(1, 'Informe a senha atual.'),
+  newPassword: password,
+})
+export type ChangePasswordRequest = z.infer<typeof changePasswordRequest>
+
+/** Avatar enviado como data URL de imagem (já redimensionada no cliente). */
+export const avatarRequest = z.object({
+  dataUrl: z
+    .string()
+    .regex(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/, 'Formato de imagem inválido. Use PNG, JPEG ou WebP.')
+    .max(400_000, 'A imagem é muito grande.'),
+})
+
+export const profileResponse = z.object({ user })
