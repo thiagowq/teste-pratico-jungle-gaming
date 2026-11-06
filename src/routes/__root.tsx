@@ -1,5 +1,15 @@
+import { useEffect } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
-import { HeadContent, Link, Outlet, createRootRouteWithContext, useRouterState, type ErrorComponentProps } from '@tanstack/react-router'
+import { toast } from 'sonner'
+import { useSessionEndReason } from '@/features/auth/session'
+import {
+  HeadContent,
+  Link,
+  Outlet,
+  createRootRouteWithContext,
+  useRouterState,
+  type ErrorComponentProps,
+} from '@tanstack/react-router'
 import { Container } from '@/components/layout/container'
 import { MobileTabBar } from '@/components/layout/mobile-tab-bar'
 import { SiteFooter } from '@/components/layout/site-footer'
@@ -27,7 +37,7 @@ function useHeaderDivider() {
 /** Telas com barra de ação própria no mobile (detalhe, carrinho, pagamento): sem barra inferior e rodapé. */
 function useImmersiveMobile() {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
-  return /^\/(nft|carrinho|pagamento)/.test(pathname)
+  return /^\/(nft|carrinho|pagamento|entrar|cadastro)/.test(pathname)
 }
 
 function RootLayout() {
@@ -49,8 +59,19 @@ function RootLayout() {
       <SiteFooter className={immersive ? 'max-md:hidden' : undefined} />
       {!immersive && <MobileTabBar />}
       <Toaster position="top-center" richColors closeButton />
+      <SessionExpiredNotice />
     </TooltipProvider>
   )
+}
+
+/** Avisa quando a sessão expira em uma página pública (nas privadas, o layout leva ao login). */
+function SessionExpiredNotice() {
+  const reason = useSessionEndReason()
+  useEffect(() => {
+    if (reason === 'expired')
+      toast.warning('Sua sessão expirou. Entre novamente para acessar sua conta.', { id: 'session-expired' })
+  }, [reason])
+  return null
 }
 
 export function NotFound() {
