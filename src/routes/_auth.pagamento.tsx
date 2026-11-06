@@ -102,7 +102,7 @@ function CheckoutForm({ cart, wallets }: { cart: Cart; wallets: WalletsResponse 
       quote={checkout.quote}
       connection={checkout.connection.status === 'connected' ? checkout.connection.connection : null}
       notice={checkout.reviewNotice}
-      submitting={checkout.isSubmitting}
+      submitting={checkout.isSubmitting || checkout.isQuoting}
       submitStatus={checkout.submitStatus}
       onConfirm={checkout.confirm}
       onClose={checkout.closeReview}
