@@ -5,6 +5,7 @@ import { checkoutHandlers } from './handlers/checkout'
 import { walletHandlers } from './handlers/wallets'
 import { catalogHandlers } from './handlers/catalog'
 import { favoritesHandlers } from './handlers/favorites'
+import { profileHandlers } from './handlers/profile'
 import { realtimeHandlers, setSocketUserResolver } from './handlers/realtime'
 import { lookupSession } from './lib/auth'
 
@@ -18,6 +19,7 @@ export const handlers: Array<RequestHandler | WebSocketHandler> = [
   ...authHandlers,
   ...catalogHandlers,
   ...favoritesHandlers,
+  ...profileHandlers,
   ...cartHandlers,
   ...walletHandlers,
   ...checkoutHandlers,

@@ -15,6 +15,7 @@ import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as EntrarRouteImport } from './routes/entrar'
+import { Route as AuthContaRouteImport } from './routes/_auth.conta'
 import { Route as AuthPagamentoRouteImport } from './routes/_auth.pagamento'
 import { Route as EmBreveSecaoRouteImport } from './routes/em-breve.$secao'
 import { Route as NftNftIdRouteImport } from './routes/nft.$nftId'
@@ -52,6 +53,11 @@ const EntrarRoute = EntrarRouteImport.update({
   path: '/entrar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthContaRoute = AuthContaRouteImport.update({
+  id: '/conta',
+  path: '/conta',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthPagamentoRoute = AuthPagamentoRouteImport.update({
   id: '/pagamento',
   path: '/pagamento',
@@ -68,19 +74,19 @@ const NftNftIdRoute = NftNftIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthContaCarteirasRoute = AuthContaCarteirasRouteImport.update({
-  id: '/conta/carteiras',
-  path: '/conta/carteiras',
-  getParentRoute: () => AuthRoute,
+  id: '/carteiras',
+  path: '/carteiras',
+  getParentRoute: () => AuthContaRoute,
 } as any)
 const AuthContaFavoritosRoute = AuthContaFavoritosRouteImport.update({
-  id: '/conta/favoritos',
-  path: '/conta/favoritos',
-  getParentRoute: () => AuthRoute,
+  id: '/favoritos',
+  path: '/favoritos',
+  getParentRoute: () => AuthContaRoute,
 } as any)
 const AuthContaPerfilRoute = AuthContaPerfilRouteImport.update({
-  id: '/conta/perfil',
-  path: '/conta/perfil',
-  getParentRoute: () => AuthRoute,
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AuthContaRoute,
 } as any)
 const AuthPedidoOrderIdRoute = AuthPedidoOrderIdRouteImport.update({
   id: '/pedido/$orderId',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/carrinho': typeof CarrinhoRoute
   '/design-system': typeof DesignSystemRoute
   '/entrar': typeof EntrarRoute
+  '/conta': typeof AuthContaRouteWithChildren
   '/pagamento': typeof AuthPagamentoRoute
   '/em-breve/$secao': typeof EmBreveSecaoRoute
   '/nft/$nftId': typeof NftNftIdRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/carrinho': typeof CarrinhoRoute
   '/design-system': typeof DesignSystemRoute
   '/entrar': typeof EntrarRoute
+  '/conta': typeof AuthContaRouteWithChildren
   '/pagamento': typeof AuthPagamentoRoute
   '/em-breve/$secao': typeof EmBreveSecaoRoute
   '/nft/$nftId': typeof NftNftIdRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/carrinho': typeof CarrinhoRoute
   '/design-system': typeof DesignSystemRoute
   '/entrar': typeof EntrarRoute
+  '/_auth/conta': typeof AuthContaRouteWithChildren
   '/_auth/pagamento': typeof AuthPagamentoRoute
   '/em-breve/$secao': typeof EmBreveSecaoRoute
   '/nft/$nftId': typeof NftNftIdRoute
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/carrinho'
     | '/design-system'
     | '/entrar'
+    | '/conta'
     | '/pagamento'
     | '/em-breve/$secao'
     | '/nft/$nftId'
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/carrinho'
     | '/design-system'
     | '/entrar'
+    | '/conta'
     | '/pagamento'
     | '/em-breve/$secao'
     | '/nft/$nftId'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/carrinho'
     | '/design-system'
     | '/entrar'
+    | '/_auth/conta'
     | '/_auth/pagamento'
     | '/em-breve/$secao'
     | '/nft/$nftId'
@@ -233,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntrarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/conta': {
+      id: '/_auth/conta'
+      path: '/conta'
+      fullPath: '/conta'
+      preLoaderRoute: typeof AuthContaRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/pagamento': {
       id: '/_auth/pagamento'
       path: '/pagamento'
@@ -256,24 +275,24 @@ declare module '@tanstack/react-router' {
     }
     '/_auth/conta/carteiras': {
       id: '/_auth/conta/carteiras'
-      path: '/conta/carteiras'
+      path: '/carteiras'
       fullPath: '/conta/carteiras'
       preLoaderRoute: typeof AuthContaCarteirasRouteImport
-      parentRoute: typeof AuthRoute
+      parentRoute: typeof AuthContaRoute
     }
     '/_auth/conta/favoritos': {
       id: '/_auth/conta/favoritos'
-      path: '/conta/favoritos'
+      path: '/favoritos'
       fullPath: '/conta/favoritos'
       preLoaderRoute: typeof AuthContaFavoritosRouteImport
-      parentRoute: typeof AuthRoute
+      parentRoute: typeof AuthContaRoute
     }
     '/_auth/conta/perfil': {
       id: '/_auth/conta/perfil'
-      path: '/conta/perfil'
+      path: '/perfil'
       fullPath: '/conta/perfil'
       preLoaderRoute: typeof AuthContaPerfilRouteImport
-      parentRoute: typeof AuthRoute
+      parentRoute: typeof AuthContaRoute
     }
     '/_auth/pedido/$orderId': {
       id: '/_auth/pedido/$orderId'
@@ -285,19 +304,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthRouteChildren {
-  AuthPagamentoRoute: typeof AuthPagamentoRoute
+interface AuthContaRouteChildren {
   AuthContaCarteirasRoute: typeof AuthContaCarteirasRoute
   AuthContaFavoritosRoute: typeof AuthContaFavoritosRoute
   AuthContaPerfilRoute: typeof AuthContaPerfilRoute
+}
+
+const AuthContaRouteChildren: AuthContaRouteChildren = {
+  AuthContaCarteirasRoute: AuthContaCarteirasRoute,
+  AuthContaFavoritosRoute: AuthContaFavoritosRoute,
+  AuthContaPerfilRoute: AuthContaPerfilRoute,
+}
+
+const AuthContaRouteWithChildren = AuthContaRoute._addFileChildren(
+  AuthContaRouteChildren,
+)
+
+interface AuthRouteChildren {
+  AuthContaRoute: typeof AuthContaRouteWithChildren
+  AuthPagamentoRoute: typeof AuthPagamentoRoute
   AuthPedidoOrderIdRoute: typeof AuthPedidoOrderIdRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthContaRoute: AuthContaRouteWithChildren,
   AuthPagamentoRoute: AuthPagamentoRoute,
-  AuthContaCarteirasRoute: AuthContaCarteirasRoute,
-  AuthContaFavoritosRoute: AuthContaFavoritosRoute,
-  AuthContaPerfilRoute: AuthContaPerfilRoute,
   AuthPedidoOrderIdRoute: AuthPedidoOrderIdRoute,
 }
 

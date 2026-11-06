@@ -3,6 +3,7 @@ import type { FavoritesResponse } from '@/api/contracts/favorites'
 import { db } from '../db'
 import { requireSession } from '../lib/auth'
 import { apiError, withNetwork } from '../lib/respond'
+import { toSummary } from '../lib/serialize'
 
 const API = '/api'
 
@@ -12,7 +13,13 @@ export const favoritesHandlers = [
     withNetwork('GET /favorites', ({ request }) => {
       const session = requireSession(request)
       if (!session.ok) return session.response
-      return HttpResponse.json<FavoritesResponse>({ nftIds: db.get().favorites[session.user.id] ?? [] })
+      const state = db.get()
+      const nftIds = state.favorites[session.user.id] ?? []
+      const items = nftIds
+        .map((id) => state.nfts[id])
+        .filter(Boolean)
+        .map(toSummary)
+      return HttpResponse.json<FavoritesResponse>({ nftIds, items })
     }),
   ),
 
