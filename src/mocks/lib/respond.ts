@@ -36,18 +36,17 @@ export function networkLatency(): number {
  * Envolve um resolver aplicando latência e falhas do cenário ativo.
  * `route` identifica a rota nas regras de falha (ex.: `POST /orders`).
  */
-export function withNetwork<
-  Params extends PathParams = PathParams,
-  Body extends DefaultBodyType = DefaultBodyType,
-  Response extends DefaultBodyType = DefaultBodyType,
->(route: string, resolver: HttpResponseResolver<Params, Body, Response>): HttpResponseResolver<Params, Body, Response> {
+export function withNetwork<Params extends PathParams = PathParams>(
+  route: string,
+  resolver: (info: Parameters<HttpResponseResolver<Params, DefaultBodyType>>[0]) => Response | Promise<Response>,
+): HttpResponseResolver<Params, DefaultBodyType> {
   return async (info) => {
     const fault = takeFault(route)
-    if (fault?.kind === 'offline') return HttpResponse.error() as never
+    if (fault?.kind === 'offline') return HttpResponse.error()
     if (fault?.kind === 'timeout') await delay('infinite')
     await delay(networkLatency())
     if (fault?.kind === 'http') {
-      return apiError(fault.status, fault.code, fault.message ?? 'Falha simulada.') as never
+      return apiError(fault.status, fault.code, fault.message ?? 'Falha simulada.')
     }
     return resolver(info)
   }
