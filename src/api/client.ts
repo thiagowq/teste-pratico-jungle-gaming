@@ -6,6 +6,8 @@ export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? '/api',
   timeout: 10_000,
   headers: { 'Content-Type': 'application/json' },
+  // Arrays como parâmetros repetidos (`categories=a&categories=b`), o formato do contrato.
+  paramsSerializer: { indexes: null },
 })
 
 api.interceptors.request.use((config) => {
