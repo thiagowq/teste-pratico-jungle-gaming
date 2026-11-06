@@ -18,5 +18,8 @@ export const queryKeys = {
     scope: (userId: string) => ['user', userId] as const,
     favorites: (userId: string) => ['user', userId, 'favorites'] as const,
     cart: (userId: string) => ['user', userId, 'cart'] as const,
+    wallets: (userId: string) => ['user', userId, 'wallets'] as const,
+    order: (userId: string, orderId: string) => ['user', userId, 'orders', orderId] as const,
+    pendingOrders: (userId: string) => ['user', userId, 'orders', 'pending'] as const,
   },
 }
