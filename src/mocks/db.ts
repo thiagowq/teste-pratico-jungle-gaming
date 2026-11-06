@@ -1,6 +1,9 @@
 import type { EditionId } from '@/api/contracts/catalog'
+import type { Order, Quote } from '@/api/contracts/checkout'
+import type { Wallet, WalletConnection } from '@/api/contracts/wallets'
 import { buildNftFixtures, type NftRecord } from './fixtures/nfts'
 import { buildUserFixtures, type UserRecord } from './fixtures/users'
+import { buildWalletFixtures } from './fixtures/wallets'
 import { createPersistentState } from './lib/persist'
 
 /** Linha do carrinho como o servidor guarda: preço registrado no momento da inclusão. */
@@ -10,6 +13,21 @@ export interface CartLineRecord {
   quantity: number
   priceAtAddEth: string
   addedAt: string
+}
+
+export interface WalletConnectionRecord extends WalletConnection {
+  userId: string
+}
+
+export interface QuoteRecord extends Quote {
+  userId: string
+}
+
+export interface OrderRecord extends Order {
+  userId: string
+  /** Momento em que a simulação liquida o pedido (confirmação ou recusa). */
+  processAt: string
+  willDecline: boolean
 }
 
 export interface SessionRecord {
@@ -33,6 +51,12 @@ export interface MockDatabase {
   carts: Record<string, CartLineRecord[]>
   /** Cupom aplicado por dono do carrinho. */
   cartCoupons: Record<string, string>
+  wallets: Record<string, { primary: Wallet | null; secondary: Wallet | null }>
+  walletConnections: Record<string, WalletConnectionRecord>
+  quotes: Record<string, QuoteRecord>
+  orders: Record<string, OrderRecord>
+  /** Chaves de idempotência por usuário: `<userId>:<chave>`. */
+  idempotency: Record<string, { orderId: string; payloadHash: string }>
 }
 
 function seed(): MockDatabase {
@@ -45,7 +69,12 @@ function seed(): MockDatabase {
     favorites: { 'user-ana': ['sage-nomad-009'] },
     carts: {},
     cartCoupons: {},
+    wallets: buildWalletFixtures(),
+    walletConnections: {},
+    quotes: {},
+    orders: {},
+    idempotency: {},
   }
 }
 
-export const db = createPersistentState<MockDatabase>('db:v3', seed)
+export const db = createPersistentState<MockDatabase>('db:v4', seed)
