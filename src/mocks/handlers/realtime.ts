@@ -29,12 +29,26 @@ export function dropSocketConnections() {
   openConnections.forEach((connection) => connection.close())
 }
 
+let outageUntil = 0
+
+/** Simula indisponibilidade do servidor de tempo real: derruba e recusa reconexões por `ms`. */
+export function startSocketOutage(ms: number) {
+  outageUntil = Date.now() + ms
+  dropSocketConnections()
+}
+
 // O binding não responde ao heartbeat do Engine.IO; sem pings o cliente
 // derruba a conexão a cada `pingInterval + pingTimeout`. Enviamos o ping.
 const PING_INTERVAL_MS = 20_000
 
 export const realtimeHandlers = [
   socketIo.addEventListener('connection', (connection) => {
+    if (Date.now() < outageUntil) {
+      // Aceita e derruba em seguida, como um servidor instável. O cliente abandona a tentativa
+      // pelo timeout de conexão e tenta de novo com backoff até o servidor voltar.
+      window.setTimeout(() => connection.client.close(), 50)
+      return
+    }
     const token = new URL(connection.client.url).searchParams.get('token')
     const io = toSocketIo(connection)
 
