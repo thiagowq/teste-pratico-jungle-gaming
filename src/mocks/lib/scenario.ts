@@ -40,6 +40,9 @@ export const SCENARIO_PRESETS: Record<string, Preset> = {
     flags: {},
   },
   'empty-catalog': { network: 'normal', faults: {}, flags: { emptyCatalog: true } },
+  'payment-declined': { network: 'normal', faults: {}, flags: { paymentDeclined: true } },
+  'wallet-rejects': { network: 'normal', faults: {}, flags: { walletRejects: true } },
+  'order-timeout': { network: 'normal', faults: {}, flags: { orderTimeout: true } },
 }
 
 const STORAGE_KEY = 'nft-mock:scenario'

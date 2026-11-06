@@ -72,5 +72,21 @@ export function useZodForm<S extends z.ZodType>(schema: S, initial: Values<S>, f
     'aria-describedby': errors[name] ? `${formId}-${name}-error` : undefined,
   })
 
-  return { values, setValue, errors, formError, setFormError, handleSubmit, applyApiError, field }
+  /** Substitui todos os valores (ex.: preencher com dados carregados) e limpa os erros. */
+  const reset = (next: Values<S>) => {
+    setValues(next)
+    setErrors({})
+    setFormError(null)
+  }
+
+  /** Valida sem enviar: devolve os dados ou mostra os erros e foca o primeiro. */
+  const validateNow = () => {
+    setSubmitted(true)
+    const { data, errors: fieldErrors } = validate(values)
+    setErrors(fieldErrors)
+    if (!data) focusFirstError(fieldErrors)
+    return data
+  }
+
+  return { values, setValue, errors, formError, setFormError, handleSubmit, applyApiError, field, reset, validateNow }
 }

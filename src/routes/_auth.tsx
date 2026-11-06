@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Outlet, createFileRoute, redirect, useNavigate, useRouterState } from '@tanstack/react-router'
 import { getSessionToken } from '@/api/session-token'
 import { useSessionToken } from '@/features/auth/session'
@@ -19,10 +19,23 @@ function ProtectedLayout() {
   const token = useSessionToken()
   const navigate = useNavigate()
   const href = useRouterState({ select: (state) => state.location.href })
+  // Destino da página privada atual; não muda enquanto a navegação para o login acontece.
+  const lastPrivateHref = useRef(href)
+  const redirecting = useRef(false)
 
   useEffect(() => {
-    if (!token) void navigate({ to: '/entrar', search: { redirect: href }, replace: true })
-  }, [token, href, navigate])
+    if (token && !href.startsWith('/entrar')) lastPrivateHref.current = href
+  }, [token, href])
+
+  useEffect(() => {
+    if (token) {
+      redirecting.current = false
+      return
+    }
+    if (redirecting.current) return
+    redirecting.current = true
+    void navigate({ to: '/entrar', search: { redirect: lastPrivateHref.current }, replace: true })
+  }, [token, navigate])
 
   if (!token) return null
   return <Outlet />
