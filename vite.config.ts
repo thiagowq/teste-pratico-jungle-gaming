@@ -16,4 +16,20 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(import.meta.dirname, './src') },
   },
+  optimizeDeps: {
+    // Pré-otimiza o que é carregado sob demanda (após o MSW iniciar), evitando
+    // reotimização no meio da sessão, que gera cópias duplicadas do React.
+    include: [
+      'react',
+      'react-dom/client',
+      'react/compiler-runtime',
+      '@tanstack/react-router',
+      '@tanstack/react-query',
+      'axios',
+      'socket.io-client',
+      'msw',
+      'msw/browser',
+      '@mswjs/socket.io-binding',
+    ],
+  },
 })
