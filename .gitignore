@@ -32,3 +32,6 @@ dist-ssr
 
 # Token pessoal do Figma (nunca versionar)
 .figma-token
+
+# Configuração local de ferramentas
+.claude/
