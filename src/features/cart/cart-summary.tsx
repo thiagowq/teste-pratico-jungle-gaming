@@ -24,12 +24,12 @@ export function SummaryLines({ cart, size = 'lg' }: { cart: Cart; size?: 'lg' | 
           (-) {hasDiscount ? formatEth(summary.discountEth) : '0.00'}
         </dd>
       </div>
-      <div className="flex flex-col items-end">
-        <div className="flex w-full items-center justify-between">
-          <dt>Taxa de rede</dt>
-          <dd className={value}>{formatEth(summary.networkFeeEth)}</dd>
-        </div>
-        <span className="mt-1 text-xs leading-4 text-brand-accent">Taxa estimada</span>
+      <div className="flex items-start justify-between">
+        <dt>Taxa de rede</dt>
+        <dd className="flex flex-col items-end gap-1">
+          <span className={value}>{formatEth(summary.networkFeeEth)}</span>
+          <span className="text-xs leading-4 text-brand-accent">Taxa estimada</span>
+        </dd>
       </div>
       <div className="mt-3 flex items-center justify-between">
         <dt className="text-base leading-4 font-bold">Total</dt>
