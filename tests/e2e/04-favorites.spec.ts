@@ -7,8 +7,12 @@ test.describe('4. Favoritos: persistência, falha de mutation e recuperação', 
     await app.goto('/nft/emerald-ape-042')
     const favorite = page.getByRole('button', { name: /Favoritar Emerald Ape #042|Remover Emerald Ape #042/ }).first()
     await expect(favorite).toHaveAttribute('aria-pressed', 'false')
+    const saved = page.waitForResponse(
+      (response) => response.request().method() === 'PUT' && response.url().includes('/api/favorites/'),
+    )
     await favorite.click()
     await expect(favorite).toHaveAttribute('aria-pressed', 'true')
+    expect((await saved).ok()).toBe(true)
     await page.reload()
     await app.waitForMocks()
     await expect(page.getByRole('button', { name: 'Remover Emerald Ape #042 dos favoritos' }).first()).toBeVisible()
@@ -38,8 +42,13 @@ test.describe('4. Favoritos: persistência, falha de mutation e recuperação', 
     await expect(page.getByText(/Não foi possível atualizar o favorito/)).toBeVisible()
 
     await page.evaluate(() => window.__mocks!.updateScenario({ network: 'instant' }))
+    // Espera a resposta da API: recarregar antes cancelaria a requisição ainda em andamento.
+    const saved = page.waitForResponse(
+      (response) => response.request().method() === 'PUT' && response.url().includes('/api/favorites/'),
+    )
     await target.click()
     await expect(target).toHaveAttribute('aria-pressed', 'true')
+    expect((await saved).ok()).toBe(true)
     await app.goto('/conta/favoritos')
     await expect(page.locator('main article h3')).toContainText(['Golden Beat #207'])
   })
