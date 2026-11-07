@@ -9,8 +9,8 @@ async function settle(app: App) {
     document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((image) => (image.loading = 'eager'))
     await Promise.all([...document.images].map((image) => image.decode().catch(() => undefined)))
   })
-  // Avisos flutuantes não fazem parte da baseline.
-  await page.addStyleTag({ content: '[data-sonner-toaster] { display: none !important; }' })
+  // Avisos flutuantes e o atalho do painel da demonstração não fazem parte da baseline.
+  await page.addStyleTag({ content: '[data-sonner-toaster], [data-mock-panel] { display: none !important; }' })
 }
 
 test.describe('Regressão visual (dados estáveis do cenário padrão)', () => {
