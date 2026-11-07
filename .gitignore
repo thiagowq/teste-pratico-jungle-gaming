@@ -38,3 +38,7 @@ dist-ssr
 
 # Arquivos temporários do plugin do TanStack Router
 .tanstack/
+
+# Vínculo local com a Vercel e token gerado pela CLI
+.vercel/
+.env.local
