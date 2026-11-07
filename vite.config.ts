@@ -16,7 +16,12 @@ export default defineConfig({
     svgr(),
   ],
   resolve: {
-    alias: { '@': path.resolve(import.meta.dirname, './src') },
+    alias: {
+      '@': path.resolve(import.meta.dirname, './src'),
+      // O cookie store do MSW não é usado por esta API (sessão via Authorization) e o
+      // pacote original pesa ~260 KB por causa da lista de sufixos públicos.
+      'tough-cookie': path.resolve(import.meta.dirname, './src/mocks/lib/tough-cookie-shim.ts'),
+    },
   },
   optimizeDeps: {
     // Pré-otimiza o que é carregado sob demanda (após o MSW iniciar), evitando

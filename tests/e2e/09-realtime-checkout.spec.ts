@@ -12,6 +12,7 @@ test.describe('9. Preço e disponibilidade via Socket.IO durante o checkout', ()
     // 1-2. NFT no carrinho; o preço muda enquanto o usuário navega no detalhe.
     await app.goto('/nft/emerald-ape-042')
     await expect(page.getByRole('heading', { level: 1, name: 'Emerald Ape #042' })).toBeVisible()
+    await app.waitForRealtime()
     await page.evaluate(() => window.__mocks!.updateEdition('emerald-ape-042', '1-50', { priceEth: '1.49' }))
 
     // 3. A interface informa a alteração (aviso acessível) e atualiza o preço.
@@ -34,6 +35,7 @@ test.describe('9. Preço e disponibilidade via Socket.IO durante o checkout', ()
     await reachReview(app)
     const review = page.getByRole('dialog', { name: 'Revise seu pedido' })
     await expect(review).toContainText('2.996 ETH')
+    await app.waitForRealtime()
     await page.evaluate(() => window.__mocks!.updateEdition('emerald-ape-042', '1-50', { priceEth: '1.59' }))
     await expect(review.getByRole('alert')).toContainText('mudou agora')
     await expect(review).toContainText('3.196 ETH')
@@ -47,6 +49,7 @@ test.describe('9. Preço e disponibilidade via Socket.IO durante o checkout', ()
   test('edição esgotada por evento aparece como esgotada no detalhe', async ({ app, page }) => {
     await app.start('/nft/emerald-ape-042?edicao=1-10')
     await expect(page.getByRole('radio', { name: /Edição 1\/10, \d+ disponíveis/ })).toBeVisible()
+    await app.waitForRealtime()
     await page.evaluate(() => window.__mocks!.updateEdition('emerald-ape-042', '1-10', { available: 0 }))
     await expect(page.getByRole('radio', { name: 'Edição 1/10, esgotada' })).toBeVisible()
     await expect(page.getByText('Esta edição está esgotada. Escolha outra edição.')).toBeVisible()

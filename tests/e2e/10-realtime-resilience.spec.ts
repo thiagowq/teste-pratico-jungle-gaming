@@ -6,6 +6,7 @@ const price = (page: import('@playwright/test').Page) => page.getByTestId('nft-p
 test.describe('10. Eventos duplicados/antigos, desconexão e retomada de pedido pendente', () => {
   test('evento duplicado ou com versão antiga não regride o estado', async ({ app, page }) => {
     await app.start('/nft/emerald-ape-042')
+    await app.waitForRealtime()
     await page.evaluate(() => window.__mocks!.updateEdition('emerald-ape-042', '1-50', { priceEth: '1.49' }))
     await expect(price(page)).toContainText('1.49 ETH')
 
@@ -30,6 +31,7 @@ test.describe('10. Eventos duplicados/antigos, desconexão e retomada de pedido 
   test('queda do tempo real: indicador e reconciliação via REST ao reconectar', async ({ app, page }) => {
     await app.start('/nft/golden-beat-207')
     await expect(price(page)).toContainText('0.99 ETH')
+    await app.waitForRealtime()
     await page.evaluate(() => window.__mocks!.socketOutage(4000))
     await expect(page.getByText('Reconectando ao tempo real…')).toBeVisible()
     // Mudança durante a queda: o evento se perde.

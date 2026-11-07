@@ -54,7 +54,8 @@ function RootLayout() {
         Pular para o conteúdo
       </a>
       <SiteHeader divider={divider} />
-      <div id="conteudo" tabIndex={-1} className="outline-none">
+      {/* Altura mínima de uma tela: enquanto a rota carrega, o rodapé fica fora da área visível e não "salta" (CLS). */}
+      <div id="conteudo" tabIndex={-1} className="min-h-svh outline-none">
         <Outlet />
       </div>
       <SiteFooter className={immersive ? 'max-md:hidden' : undefined} />

@@ -1,0 +1,359 @@
+{
+  "environment": {
+    "date": "2026-11-07T04:21:15.114Z",
+    "lighthouse": "13.6.0",
+    "browser": "Chromium 156.0.8078.80",
+    "node": "v24.13.0",
+    "os": "Windows_NT 10.0.26100",
+    "cpu": "AMD Ryzen 5 3600 6-Core Processor               (12 threads)",
+    "memoryGb": 16,
+    "runsPerPage": 3,
+    "server": "vite preview (build de produção, mocks ligados, cenário padrão)"
+  },
+  "results": [
+    {
+      "page": "inicio",
+      "path": "/",
+      "profile": "mobile",
+      "runs": [
+        {
+          "scores": {
+            "performance": 81,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 4064.6174499999997,
+            "cls": 0.0004547002746704083,
+            "tbt": 171.71270000000004,
+            "fcp": 2565.1492,
+            "si": 2565.1492
+          },
+          "observed": {
+            "fcp": 489,
+            "lcp": 555
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 80,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 4081.110600000001,
+            "cls": 0.0004547002746704083,
+            "tbt": 188.90744999999993,
+            "fcp": 2724.7404,
+            "si": 2724.7404
+          },
+          "observed": {
+            "fcp": 315,
+            "lcp": 415
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 78,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 4136.8414,
+            "cls": 0.0004547002746704083,
+            "tbt": 210.34654999999975,
+            "fcp": 2757.2276,
+            "si": 2757.2276
+          },
+          "observed": {
+            "fcp": 342,
+            "lcp": 442
+          },
+          "lighthouseVersion": "13.6.0"
+        }
+      ],
+      "median": {
+        "scores": {
+          "performance": 80,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "lcp": 4081.110600000001,
+          "cls": 0.0004547002746704083,
+          "tbt": 188.90744999999993,
+          "fcp": 2724.7404,
+          "si": 2724.7404
+        },
+        "observed": {
+          "fcp": 342,
+          "lcp": 442
+        }
+      }
+    },
+    {
+      "page": "inicio",
+      "path": "/",
+      "profile": "desktop",
+      "runs": [
+        {
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 893.3190999999999,
+            "cls": 0.001479242513790386,
+            "tbt": 1,
+            "fcp": 619.8794,
+            "si": 619.8794
+          },
+          "observed": {
+            "fcp": 293,
+            "lcp": 376
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 893.6474999999998,
+            "cls": 0.001479242513790386,
+            "tbt": 2,
+            "fcp": 621.765,
+            "si": 621.765
+          },
+          "observed": {
+            "fcp": 313,
+            "lcp": 363
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 910.7246000000002,
+            "cls": 0.001479242513790386,
+            "tbt": 2,
+            "fcp": 620.8164,
+            "si": 620.8164
+          },
+          "observed": {
+            "fcp": 285,
+            "lcp": 335
+          },
+          "lighthouseVersion": "13.6.0"
+        }
+      ],
+      "median": {
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "lcp": 893.6474999999998,
+          "cls": 0.001479242513790386,
+          "tbt": 2,
+          "fcp": 620.8164,
+          "si": 620.8164
+        },
+        "observed": {
+          "fcp": 293,
+          "lcp": 363
+        }
+      }
+    },
+    {
+      "page": "detalhe",
+      "path": "/nft/emerald-ape-042",
+      "profile": "mobile",
+      "runs": [
+        {
+          "scores": {
+            "performance": 86,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 3937.169199999999,
+            "cls": 0,
+            "tbt": 161.99999999999955,
+            "fcp": 764.0563999999999,
+            "si": 1583.8247469658113
+          },
+          "observed": {
+            "fcp": 424,
+            "lcp": 1020
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 87,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 3922.5795999999996,
+            "cls": 0,
+            "tbt": 146,
+            "fcp": 764.1931999999999,
+            "si": 1571.2708056791826
+          },
+          "observed": {
+            "fcp": 404,
+            "lcp": 1055
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 86,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 3927.3310999999994,
+            "cls": 0,
+            "tbt": 144.99999999999932,
+            "fcp": 762.4437,
+            "si": 1550.9855455453242
+          },
+          "observed": {
+            "fcp": 389,
+            "lcp": 1044
+          },
+          "lighthouseVersion": "13.6.0"
+        }
+      ],
+      "median": {
+        "scores": {
+          "performance": 86,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "lcp": 3927.3310999999994,
+          "cls": 0,
+          "tbt": 146,
+          "fcp": 764.0563999999999,
+          "si": 1571.2708056791826
+        },
+        "observed": {
+          "fcp": 404,
+          "lcp": 1044
+        }
+      }
+    },
+    {
+      "page": "detalhe",
+      "path": "/nft/emerald-ape-042",
+      "profile": "desktop",
+      "runs": [
+        {
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 875.8639000000001,
+            "cls": 0.0001221861045442606,
+            "tbt": 0,
+            "fcp": 213.12130000000002,
+            "si": 385.64919558334793
+          },
+          "observed": {
+            "fcp": 248,
+            "lcp": 381
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 876.2375999999998,
+            "cls": 0.0001221861045442606,
+            "tbt": 0,
+            "fcp": 257.5792,
+            "si": 361.25337945021556
+          },
+          "observed": {
+            "fcp": 226,
+            "lcp": 359
+          },
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcp": 873.6578999999999,
+            "cls": 0.0001221861045442606,
+            "tbt": 0,
+            "fcp": 212.71929999999998,
+            "si": 386.0403816801256
+          },
+          "observed": {
+            "fcp": 245,
+            "lcp": 379
+          },
+          "lighthouseVersion": "13.6.0"
+        }
+      ],
+      "median": {
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "lcp": 875.8639000000001,
+          "cls": 0.0001221861045442606,
+          "tbt": 0,
+          "fcp": 213.12130000000002,
+          "si": 385.64919558334793
+        },
+        "observed": {
+          "fcp": 245,
+          "lcp": 379
+        }
+      }
+    }
+  ]
+}

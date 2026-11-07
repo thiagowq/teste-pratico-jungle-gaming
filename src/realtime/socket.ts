@@ -1,4 +1,4 @@
-import { io, type Socket } from 'socket.io-client'
+import type { Socket } from 'socket.io-client'
 import { EventGate } from './event-gate'
 import { REALTIME_EVENT_TYPES, type RealtimeEvent, type RealtimeEventOf, type RealtimeEventType } from './events'
 
@@ -19,10 +19,16 @@ function defaultSocketUrl() {
  *
  * Usa apenas o transporte WebSocket porque o MSW intercepta WebSocket, não
  * long-polling HTTP (ver ARCHITECTURE.md).
+ *
+ * O `socket.io-client` é importado sob demanda: fica fora do caminho crítico da
+ * primeira renderização e só é avaliado depois que o MSW substituiu o `WebSocket`.
  */
 class RealtimeClient {
   private socket: Socket | null = null
   private token: string | null = null
+  /** Incrementado a cada conexão/desconexão: descarta um import pendente que ficou obsoleto. */
+  private generation = 0
+  private active = false
   private status: ConnectionStatus = 'idle'
   private readonly gate = new EventGate()
   private readonly handlers = new Map<RealtimeEventType, Set<(event: RealtimeEvent) => void>>()
@@ -30,9 +36,18 @@ class RealtimeClient {
   private readonly reconnectListeners = new Set<() => void>()
 
   connect(token: string | null) {
-    if (token === this.token && this.socket) return
+    if (token === this.token && this.active) return
     this.disconnect()
     this.token = token
+    this.active = true
+    this.setStatus('connecting')
+    const generation = ++this.generation
+    void import('socket.io-client').then(({ io }) => {
+      if (generation === this.generation) this.open(io, token)
+    })
+  }
+
+  private open(io: typeof import('socket.io-client').io, token: string | null) {
     // Visitantes também recebem eventos públicos (preço/disponibilidade).
     const socket = io(defaultSocketUrl(), {
       path: '/realtime/',
@@ -44,7 +59,6 @@ class RealtimeClient {
       timeout: 5_000,
     })
     this.socket = socket
-    this.setStatus('connecting')
 
     let hasConnected = false
     socket.on('connect', () => {
@@ -62,6 +76,8 @@ class RealtimeClient {
   }
 
   disconnect() {
+    this.generation++
+    this.active = false
     if (this.socket) {
       this.socket.removeAllListeners()
       this.socket.io.removeAllListeners()

@@ -24,6 +24,11 @@ interface OpenConnection {
 }
 const openConnections = new Set<OpenConnection>()
 
+/** Quantidade de clientes conectados ao tempo real (testes esperam a conexão antes de emitir). */
+export function socketConnectionCount() {
+  return openConnections.size
+}
+
 /** Derruba todas as conexões abertas (simula queda de rede no socket). */
 export function dropSocketConnections() {
   openConnections.forEach((connection) => connection.close())
