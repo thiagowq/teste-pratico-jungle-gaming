@@ -59,7 +59,8 @@ function RootLayout() {
       </div>
       <SiteFooter className={immersive ? 'max-md:hidden' : undefined} />
       {!immersive && <MobileTabBar />}
-      <Toaster position="top-center" richColors closeButton />
+      {/* No mobile, abaixo dos botões do topo (voltar, favoritar) para não cobri-los. */}
+      <Toaster position="top-center" richColors closeButton mobileOffset={{ top: 72 }} />
       <SessionExpiredNotice />
       <ConnectionStatus />
     </TooltipProvider>

@@ -5,7 +5,7 @@ import { queryKeys } from '@/lib/query-keys'
 import { useSession } from '@/features/auth/session'
 
 export function useFavorites() {
-  const { user } = useSession()
+  const { user, token } = useSession()
   const query = useQuery({
     queryKey: queryKeys.user.favorites(user?.id ?? 'anonymous'),
     queryFn: ({ signal }) => fetchFavorites(signal),
@@ -13,7 +13,12 @@ export function useFavorites() {
     staleTime: 60_000,
   })
   const ids = new Set(query.data?.nftIds ?? [])
-  return { ...query, isFavorite: (nftId: string) => ids.has(nftId), isAuthenticated: user !== null }
+  return {
+    ...query,
+    isFavorite: (nftId: string) => ids.has(nftId),
+    // Com token, a sessão pode ainda estar sendo confirmada: o servidor valida a mutation.
+    isAuthenticated: token !== null,
+  }
 }
 
 /**
