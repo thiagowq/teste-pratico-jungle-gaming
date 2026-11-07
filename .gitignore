@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Testes e auditorias
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.env.local
+
+# Token pessoal do Figma (nunca versionar)
+.figma-token
+
+# Configuração local de ferramentas
+.claude/
+
+# Arquivos temporários do plugin do TanStack Router
+.tanstack/

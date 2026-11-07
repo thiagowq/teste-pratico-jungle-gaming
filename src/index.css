@@ -1,111 +1,151 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/roboto-mono';
+
+/*
+ * Tokens extraídos do Figma (estilos "Color/*", "Text/*" e efeitos).
+ * O layout é escuro por definição; não há tema claro no design.
+ */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Paleta do Figma */
+  --kurio-ink: #140d0a; /* Color/Ink — fundo da página */
+  --kurio-surface-card: #241612; /* Color/Surface Card */
+  --kurio-surface-raised: #2f1d15; /* Color/Surface Raised */
+  --kurio-surface-dark: #38220f; /* Color/Surface Dark — faixa do rodapé */
+  --kurio-border: #3f2319; /* Color/Border */
+  --kurio-border-soft: #55321f; /* Color/Border Soft */
+  --kurio-foreground: #f5f1eb; /* Color/Foreground */
+  --kurio-primary: #d28a4c; /* Color/Primary */
+  --kurio-accent: #e89b55; /* Text/Accent — preços, links ativos */
+  --kurio-text-secondary: #cfb28c; /* Text/Secondary */
+  --kurio-secondary: #b39463; /* Color/Secondary */
+  --kurio-coral: #f0805f; /* Text/Coral — campos obrigatórios */
+  --kurio-amber: #e3a44e; /* Color/Amber */
+  --kurio-success: #00a66c; /* Color/Success */
+  --kurio-error: #ed1b2e; /* Color/Error */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Mapeamento para os tokens do shadcn/ui */
+  --background: var(--kurio-ink);
+  --foreground: var(--kurio-foreground);
+  --card: var(--kurio-surface-card);
+  --card-foreground: var(--kurio-foreground);
+  --popover: var(--kurio-surface-raised);
+  --popover-foreground: var(--kurio-foreground);
+  --primary: var(--kurio-primary);
+  --primary-foreground: var(--kurio-ink);
+  --secondary: var(--kurio-surface-raised);
+  --secondary-foreground: var(--kurio-foreground);
+  --muted: var(--kurio-surface-raised);
+  --muted-foreground: var(--kurio-text-secondary);
+  --accent: var(--kurio-surface-raised);
+  --accent-foreground: var(--kurio-accent);
+  --destructive: var(--kurio-error);
+  --border: var(--kurio-border);
+  --input: var(--kurio-border);
+  --ring: var(--kurio-primary);
+  --radius: 0.375rem;
+}
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme inline {
+  --font-sans: 'Roboto Mono Variable', ui-monospace, monospace;
+  --font-mono: 'Roboto Mono Variable', ui-monospace, monospace;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-ink: var(--kurio-ink);
+  --color-surface-card: var(--kurio-surface-card);
+  --color-surface-raised: var(--kurio-surface-raised);
+  --color-surface-dark: var(--kurio-surface-dark);
+  --color-border-soft: var(--kurio-border-soft);
+  --color-brand: var(--kurio-primary);
+  --color-brand-accent: var(--kurio-accent);
+  --color-text-secondary: var(--kurio-text-secondary);
+  --color-tan: var(--kurio-secondary);
+  --color-coral: var(--kurio-coral);
+  --color-amber: var(--kurio-amber);
+  --color-success: var(--kurio-success);
+  --color-error: var(--kurio-error);
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
+
+  --shadow-card: 0 4px 12px rgb(20 13 10 / 15%);
+  --shadow-overlay: 0 0 20px rgb(10 6 4 / 45%);
+
+  /* Container do layout desktop: 1200px úteis (margens de 120px em 1440px). */
+  --container-page: 75rem;
+
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    min-height: 100dvh;
+  }
+  :focus-visible {
+    outline: 2px solid var(--kurio-accent);
+    outline-offset: 2px;
   }
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+@layer components {
+  /* Skeleton com shimmer: mantém as dimensões do conteúdo final. */
+  .skeleton {
+    @apply rounded-md;
+    background: linear-gradient(
+      90deg,
+      var(--kurio-surface-card) 0%,
+      var(--kurio-surface-raised) 50%,
+      var(--kurio-surface-card) 100%
+    );
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
   }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
