@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const PORT = 4173
-const BASE_URL = `http://localhost:${PORT}`
+// E2E_BASE_URL roda a suíte contra um ambiente já publicado (ex.: o deploy na Vercel).
+const REMOTE_URL = process.env.E2E_BASE_URL
+const BASE_URL = REMOTE_URL ?? `http://localhost:${PORT}`
 
 /**
  * E2E contra o build de produção com os mocks ligados (o mesmo artefato do
@@ -39,10 +41,12 @@ export default defineConfig({
       use: { ...devices['Pixel 7'], viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 },
     },
   ],
-  webServer: {
-    command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
-    url: BASE_URL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-  },
+  webServer: REMOTE_URL
+    ? undefined
+    : {
+        command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
+        url: BASE_URL,
+        reuseExistingServer: !process.env.CI,
+        timeout: 180_000,
+      },
 })

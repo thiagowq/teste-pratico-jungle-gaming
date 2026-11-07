@@ -4,6 +4,7 @@ Marketplace de NFTs com catálogo, detalhe com edições, carrinho, pagamento co
 
 A API REST e o servidor Socket.IO são simulados no navegador com [MSW](https://mswjs.io). A demonstração funciona sem backend, inclusive no deploy, e os cenários de falha podem ser reproduzidos a qualquer momento.
 
+- **Demonstração publicada**: <https://teste-pratico-jungle-gaming.vercel.app>.
 - **Arquitetura e decisões**: [ARCHITECTURE.md](ARCHITECTURE.md).
 - **Auditoria Lighthouse**: [lighthouse/README.md](lighthouse/README.md).
 
@@ -185,15 +186,30 @@ Mediana de 3 medições por página e perfil. Detalhes e justificativas em [ligh
 
 ## Deploy
 
-O projeto é uma SPA estática: o build fica em `dist/`, com os mocks ligados. O `vercel.json` reescreve as rotas para o `index.html`, então o acesso direto a qualquer URL funciona.
+A demonstração está publicada na Vercel: <https://teste-pratico-jungle-gaming.vercel.app>.
 
-Na Vercel:
+O projeto é uma SPA estática: o build fica em `dist/`, com os mocks ligados.
 
-1. importar o repositório;
-2. manter o preset Vite (build `npm run build`, saída `dist`);
-3. publicar.
+- O `vercel.json` reescreve as rotas para o `index.html`, então o acesso direto a qualquer URL funciona.
+- O repositório está conectado à Vercel: cada push na `main` publica em produção, e as outras branches ganham deploys de preview.
+- O `.vercelignore` deixa de fora do upload os relatórios, as artes originais e os testes.
+
+Para publicar pela CLI:
+
+```bash
+npx vercel link
+npx vercel deploy --prod
+```
 
 Não é preciso configurar variáveis de ambiente, porque o `.env.production` já liga os mocks.
+
+Para rodar a suíte E2E contra o ambiente publicado, em vez do build local:
+
+```bash
+E2E_BASE_URL=https://teste-pratico-jungle-gaming.vercel.app npx playwright test --grep-invert "Regressão visual"
+```
+
+As baselines visuais são geradas localmente e não são comparadas com o ambiente remoto.
 
 ## Estrutura
 

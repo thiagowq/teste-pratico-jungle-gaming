@@ -1,0 +1,13 @@
+# Só o necessário para o build na Vercel.
+.figma-token
+.claude/
+node_modules/
+dist/
+test-results/
+playwright-report/
+lighthouse/
+design-assets/
+tests/
+.tanstack/
+.env.local
+.vercel/
