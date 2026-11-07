@@ -28,4 +28,10 @@ export default defineConfig([
     files: ["src/routes/**/*.tsx"],
     rules: { "react-refresh/only-export-components": "off" },
   },
+  {
+    // Testes E2E rodam no Node; o "use" das fixtures do Playwright não é um hook do React.
+    files: ['tests/**/*.ts', 'playwright.config.ts'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: { 'react-hooks/rules-of-hooks': 'off' },
+  },
 ])

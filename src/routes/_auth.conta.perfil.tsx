@@ -102,8 +102,7 @@ function ProfileForm({ user }: { user: User }) {
       }
     } catch (error) {
       const apiError = error as ApiError
-      profile.applyApiError(apiError)
-      if (!apiError.isAuthError) toast.error(apiError.message)
+      if (!profile.applyApiError(apiError) && !apiError.isAuthError) toast.error(apiError.message)
     } finally {
       setSaving(false)
     }

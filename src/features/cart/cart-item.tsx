@@ -98,6 +98,8 @@ export function CartItemRow({ item }: { item: CartItemData }) {
             params={{ nftId: item.nftId }}
             search={{ edicao: item.editionId }}
             className="shrink-0"
+            tabIndex={-1}
+            aria-hidden
           >
             <NftImage artwork={item.artwork} alt="" sizes="70px" className="size-[70px] rounded-md" />
           </Link>
@@ -157,7 +159,13 @@ export function CartItemCard({ item }: { item: CartItemData }) {
       )}
       aria-busy={actions.busy}
     >
-      <Link to="/nft/$nftId" params={{ nftId: item.nftId }} search={{ edicao: item.editionId }} className="shrink-0">
+      <Link
+        to="/nft/$nftId"
+        params={{ nftId: item.nftId }}
+        search={{ edicao: item.editionId }}
+        className="shrink-0"
+        aria-label={`Ver ${item.name}`}
+      >
         <NftImage artwork={item.artwork} alt="" sizes="100px" className="size-[100px] rounded-[14px]" />
       </Link>
       <div className="flex min-w-0 flex-1 flex-col gap-1.5 py-3 pr-4 pl-2">
