@@ -84,7 +84,7 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
 
   const price = (
     <span className="flex items-center gap-3">
-      <span className="font-bold text-brand-accent">
+      <span className="font-bold text-brand-accent" data-testid="nft-price">
         <span className="sr-only">Preço da edição {edition.label}: </span>
         {formatEth(edition.priceEth)}
       </span>
