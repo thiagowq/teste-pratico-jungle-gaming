@@ -161,6 +161,31 @@ Outras regras:
 - **Catálogo**: os filtros vivem na URL (search params validados com zod), então voltar e avançar no navegador restauram a busca. A página anterior fica visível enquanto a próxima carrega (`placeholderData`).
 - **Favoritos**: a mutação é otimista (`onMutate`). Em erro, o valor anterior é restaurado e um aviso é exibido.
 
+## Responsividade e acessibilidade
+
+### Larguras
+
+- **Breakpoint principal**: 768 px (`DESKTOP_QUERY`). A partir dele, as telas usam a composição desktop do Figma; abaixo, a mobile. O tablet (768 a 1023 px) usa a composição desktop com colunas e espaçamentos reduzidos.
+- **Verificação**: todas as telas, públicas e privadas, foram checadas em 390, 768, 1024 e 1440 px, sem overflow horizontal. Os testes E2E rodam em 390 e 1440 px.
+- **Telas sem frame mobile**: perfil, carteiras, favoritos e confirmação seguem o padrão visual das telas mobile desenhadas. Na conta, o menu fica acima do conteúdo, e os formulários ficam em uma coluna.
+
+### Ajustes de acessibilidade em relação ao layout
+
+O layout foi mantido; os ajustes acrescentam comportamento ou semântica sem mudar a aparência.
+
+- **Navegação por teclado**: há um link "Pular para o conteúdo" e foco visível em todos os controles. As ações dos cards, que no Figma aparecem só no hover, também aparecem com foco.
+- **Carrossel do herói**: não gira sozinho, para não mover conteúdo sem ação do usuário. Os destaques mudam pelos indicadores, que são botões com nome.
+- **Botões só com ícone** (favoritar, quantidade, remover, compartilhar): têm nome acessível que inclui o NFT, como "Aumentar quantidade de Emerald Ape #042".
+- **Filtro de preço**: cada alça do slider tem nome próprio ("Preço mínimo", "Preço máximo").
+- **Formulários**: as mensagens de erro ficam ligadas aos campos (`aria-describedby`, `aria-invalid`), e o foco vai para o primeiro campo com erro. Erros de campo vindos da API aparecem no próprio campo.
+- **Estados não dependentes só de cor**: edição esgotada, cupom inválido, pendências do carrinho e status do pedido também são descritos em texto.
+- **Feedback**: mutações e eventos em tempo real geram avisos anunciados por leitores de tela (toasts e regiões `role="status"`). A perda e a volta da conexão em tempo real também são anunciadas. No mobile, os avisos ficam abaixo dos botões do topo para não cobri-los.
+- **Miniaturas do carrinho**: no desktop ficam fora da ordem de tabulação, porque o nome do NFT já é o link. No mobile, onde a miniatura é o alvo de toque, ela tem rótulo.
+- **Movimento**: o shimmer dos skeletons e as animações de carregamento são desligados com `prefers-reduced-motion`.
+- **Diálogos e gavetas** (login no desktop, revisão do pedido, filtros no mobile, painel de cenários): prendem o foco e o devolvem ao elemento que os abriu.
+
+A verificação automática usa o axe nos testes E2E (cenário 11) e o Lighthouse: acessibilidade 100 nas páginas auditadas.
+
 ## Camada de mocks
 
 - **Banco**: `createPersistentState` grava cada tabela em `localStorage` (`nft-mock:db:v4`). A chave tem versão para que uma mudança de esquema não leia dados antigos.
