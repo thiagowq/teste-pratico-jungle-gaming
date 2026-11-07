@@ -55,13 +55,16 @@ export function useZodForm<S extends z.ZodType>(schema: S, initial: Values<S>, f
     await onValid(data)
   }
 
-  /** Aplica um erro da API: campos conhecidos vão para os campos, o resto para o topo. */
+  /** Aplica um erro da API: campos conhecidos recebem a mensagem; sem campo, ela vai para o topo. Devolve se houve erro de campo. */
   const applyApiError = (error: ApiError) => {
     const known = Object.fromEntries(Object.entries(error.fieldErrors).filter(([key]) => key in (values as object)))
     setErrors(known)
-    if (Object.keys(known).length) focusFirstError(known)
-    else setFormError(error.message)
-    if (Object.keys(known).length && error.code !== 'VALIDATION_ERROR') setFormError(error.message)
+    if (Object.keys(known).length) {
+      focusFirstError(known)
+      return true
+    }
+    setFormError(error.message)
+    return false
   }
 
   /** Props de acessibilidade de um campo: id, estado inválido e associação com a mensagem. */

@@ -103,8 +103,8 @@ export function WalletForm({
           onSaved?.()
         } catch (error) {
           const apiError = error as ApiError
-          form.applyApiError(apiError)
-          if (!apiError.isAuthError) toast.error(apiError.message)
+          // Erro de campo já aparece no campo; aviso só para erros gerais.
+          if (!form.applyApiError(apiError) && !apiError.isAuthError) toast.error(apiError.message)
         }
       })}
       className="flex flex-col gap-6"
