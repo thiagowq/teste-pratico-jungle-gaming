@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useSessionEndReason } from '@/features/auth/session'
@@ -18,6 +18,10 @@ import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { ConnectionStatus } from '@/realtime/connection-status'
+
+// Painel da demonstração: carregado à parte e só quando os mocks estão ligados.
+const ScenarioPanel =
+  import.meta.env.VITE_ENABLE_MOCKS === 'true' ? lazy(() => import('@/features/demo/scenario-panel')) : null
 
 export interface RouterContext {
   queryClient: QueryClient
@@ -64,6 +68,11 @@ function RootLayout() {
       <Toaster position="top-center" richColors closeButton mobileOffset={{ top: 72 }} />
       <SessionExpiredNotice />
       <ConnectionStatus />
+      {ScenarioPanel && (
+        <Suspense>
+          <ScenarioPanel />
+        </Suspense>
+      )}
     </TooltipProvider>
   )
 }
