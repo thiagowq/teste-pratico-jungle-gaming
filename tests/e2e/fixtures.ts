@@ -30,6 +30,11 @@ export class App {
     await this.page.waitForFunction(() => Boolean(window.__mocks), null, { timeout: 20_000 })
   }
 
+  /** Espera o cliente Socket.IO conectar (carregado sob demanda após a primeira renderização). */
+  async waitForRealtime() {
+    await this.page.waitForFunction(() => (window.__mocks?.socketConnections() ?? 0) > 0, null, { timeout: 20_000 })
+  }
+
   /** Estado isolado: banco simulado restaurado e cenário escolhido antes de abrir a rota. */
   async start(path = '/', scenario: Scenario = 'instant') {
     await this.page.goto('/em-breve/inicio')

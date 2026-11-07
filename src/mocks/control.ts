@@ -6,7 +6,7 @@ import { publishNftUpdated } from './lib/events'
 import { resetAllPersistentState } from './lib/persist'
 import { reseedLatency } from './lib/respond'
 import { getScenario, setFault, setScenario, updateScenario, SCENARIO_PRESETS, type FaultRule } from './lib/scenario'
-import { dropSocketConnections, startSocketOutage } from './handlers/realtime'
+import { dropSocketConnections, socketConnectionCount, startSocketOutage } from './handlers/realtime'
 
 /**
  * API de controle dos mocks exposta em `window.__mocks`. Usada pelos testes
@@ -55,6 +55,7 @@ export const mockControl = {
       })
     }),
   dropSockets: () => dropSocketConnections(),
+  socketConnections: () => socketConnectionCount(),
   /** Tempo real fora do ar por `ms` (eventos do período são perdidos e recuperados via REST). */
   socketOutage: (ms: number) => startSocketOutage(ms),
 }
